@@ -7,7 +7,7 @@ import com.giphy.sdk.core.models.enums.MediaType;
 import com.giphy.sdk.core.network.response.ListMediaResponse;
 
 import org.maadlabs.piki.data.di.DaggerGPHComponent;
-import org.maadlabs.piki.data.entity.ImageData;
+import org.maadlabs.piki.domain.entity.ImageData;
 import org.maadlabs.piki.data.net.RestApi;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package org.maadlabs.piki.data.entity;
+package org.maadlabs.piki.domain.entity;
 
 /**
  * Created by brainfreak on 10/11/17.

@@ -1,5 +1,7 @@
 package org.maadlabs.piki.domain.repository;
 
+import org.maadlabs.piki.domain.entity.ImageData;
+
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -10,5 +12,5 @@ import io.reactivex.Observable;
 
 public interface ImageRepository {
 
-    Observable<List<String>> search(String query, int limit);
+    Observable<List<ImageData>> search(String query, int limit);
 }

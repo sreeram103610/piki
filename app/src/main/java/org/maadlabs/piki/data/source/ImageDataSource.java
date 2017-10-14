@@ -1,6 +1,6 @@
 package org.maadlabs.piki.data.source;
 
-import org.maadlabs.piki.data.entity.ImageData;
+import org.maadlabs.piki.domain.entity.ImageData;
 
 import java.util.List;
 

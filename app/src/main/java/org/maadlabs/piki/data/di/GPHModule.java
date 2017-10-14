@@ -2,8 +2,10 @@ package org.maadlabs.piki.data.di;
 
 import com.giphy.sdk.core.network.api.GPHApiClient;
 
+import org.maadlabs.piki.data.net.RestApi;
 import org.maadlabs.piki.data.net.giphy.GPHApiSync;
 import org.maadlabs.piki.data.net.giphy.GPHApiSyncClient;
+import org.maadlabs.piki.data.net.giphy.GiphyRestApi;
 
 import dagger.Module;
 import dagger.Provides;
@@ -20,5 +22,10 @@ public class GPHModule {
     @Provides
     GPHApiSync client() {
         return new GPHApiSyncClient(API_KEY);
+    }
+
+    @Provides
+    RestApi restapi() {
+        return new GiphyRestApi();
     }
 }
