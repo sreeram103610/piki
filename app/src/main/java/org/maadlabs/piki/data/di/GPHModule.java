@@ -24,8 +24,4 @@ public class GPHModule {
         return new GPHApiSyncClient(API_KEY);
     }
 
-    @Provides
-    RestApi restapi() {
-        return new GiphyRestApi();
-    }
 }

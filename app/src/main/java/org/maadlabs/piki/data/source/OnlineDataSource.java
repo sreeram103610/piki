@@ -1,5 +1,6 @@
 package org.maadlabs.piki.data.source;
 
+import org.maadlabs.piki.data.net.giphy.GiphyRestApi;
 import org.maadlabs.piki.domain.entity.ImageData;
 import org.maadlabs.piki.data.net.RestApi;
 
@@ -15,8 +16,11 @@ import io.reactivex.Observable;
 
 public class OnlineDataSource implements ImageDataSource {
 
-    @Inject
     RestApi mRestApi;
+
+    public OnlineDataSource() {
+        mRestApi = new GiphyRestApi();
+    }
 
     @Override
     public Observable<List<ImageData>> search(String query, int limit) {

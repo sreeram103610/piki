@@ -12,6 +12,7 @@ import org.maadlabs.piki.data.net.RestApi;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
@@ -34,15 +35,22 @@ public class GiphyRestApi implements RestApi {
     }
 
     @Override
-    public Observable<List<ImageData>> imageList(String query, int limit) {
+    public Observable<List<ImageData>> imageList(final String query, final int limit) {
 
-        mListMediaResponse = mGPHApi.search(query, MediaType.gif, limit, null, null, null);
-        return Observable.just(mListMediaResponse).map(new Function<ListMediaResponse, List<ImageData>>() {
+        return Observable.fromCallable(new Callable<ListMediaResponse>() {
+
             @Override
-            public List<ImageData> apply(@NonNull ListMediaResponse response) throws Exception {
-                return map(response);
+            public ListMediaResponse call() throws Exception {
+                return mGPHApi.search(query, MediaType.gif, limit, null, null, null);
+
             }
-        });
+        }).map(new Function<ListMediaResponse, List<ImageData>>() {
+                @Override
+                public List<ImageData> apply(@NonNull ListMediaResponse response) throws Exception {
+                    return map(response);
+                }
+            });
+
     }
 
     private List<ImageData> map(ListMediaResponse response) {

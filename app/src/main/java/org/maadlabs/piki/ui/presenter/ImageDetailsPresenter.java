@@ -1,5 +1,6 @@
 package org.maadlabs.piki.ui.presenter;
 
+
 import org.maadlabs.piki.data.mapper.ImageDataMapper;
 import org.maadlabs.piki.domain.entity.ImageData;
 import org.maadlabs.piki.domain.interacter.SearchImageListUseCase;
@@ -82,7 +83,7 @@ public class ImageDetailsPresenter implements Presenter {
 
     @Override
     public void destory() {
-
+        mImageListUseCase.removeObserver();
     }
 
     public void onSearchQuery(String query) {

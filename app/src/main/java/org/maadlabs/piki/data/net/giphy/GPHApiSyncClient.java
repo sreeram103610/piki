@@ -26,6 +26,7 @@ public class GPHApiSyncClient extends GPHApiClient implements GPHApiSync{
     public GPHApiSyncClient(String apiKey) {
         super(apiKey);
         this.mApiKey = getApiKey();
+        mNetworkSession = getNetworkSession();
     }
 
     public GPHApiSyncClient(String apiKey, NetworkSession session) {

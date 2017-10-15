@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import org.maadlabs.piki.R;
 import org.maadlabs.piki.ui.model.ImageDataModel;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -61,9 +62,9 @@ public class ImagesListAdapter extends RecyclerView.Adapter<ImagesListAdapter.Ho
         }
     }
 
-    public void setCollection(List<ImageDataModel> imagesList) {
+    public void setCollection(Collection<ImageDataModel> imagesList) {
         mImageDataModelList.clear();
-        mImageDataModelList.addAll(imagesList);
+        mImageDataModelList = (List<ImageDataModel>) imagesList;
         notifyDataSetChanged();
     }
 }

@@ -20,7 +20,7 @@ public abstract class UseCase<T> {
     public void execute(DisposableObserver<T> observer) {
 
         mDisposableObserver = observer;
-        buildObservable().subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(observer);
+        buildObservable().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(observer);
     }
 
     public void removeObserver() {
