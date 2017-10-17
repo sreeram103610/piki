@@ -13,4 +13,12 @@ public class ImgurSearchResponse {
     List<ImgurSearchResponseData> data;
     boolean success;
     int statusCode;
+
+    public List<ImgurSearchResponseData> getData() {
+        return data;
+    }
+
+    public void setData(List<ImgurSearchResponseData> data) {
+        this.data = data;
+    }
 }

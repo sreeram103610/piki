@@ -1,31 +1,60 @@
 package org.maadlabs.piki.data.net.imgur;
 
+
+import com.google.gson.Gson;
+
+import org.maadlabs.piki.data.net.imgur.model.ImgurSearchRequest;
 import org.maadlabs.piki.data.net.imgur.model.ImgurSearchResponse;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.Callable;
 
-import retrofit2.Call;
-import retrofit2.http.GET;
-import retrofit2.http.Header;
-import retrofit2.http.Headers;
-import retrofit2.http.Path;
-import retrofit2.http.Query;
+import javax.inject.Inject;
+
+import io.reactivex.Observable;
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 /**
  * Created by brainfreak on 10/16/17.
  */
 
-public interface ImgurAPI {
+public class ImgurAPI {
 
-    @Headers("Authorization: Client-ID b23fe7cd378c3e0")
-    @GET("/search/{sort}")
-    Call<List<ImgurSearchResponse>> search(@Path("sort") String sortBy, @Query("q") String query);
+    private static final String AUTHORIZATION_VALUE = "Client-ID b23fe7cd378c3e0";
 
-    @Headers("Authorization: Client-ID b23fe7cd378c3e0")
-    @GET("/search/{sort}/{window}")
-    Call<List<ImgurSearchResponse>> search(@Path("sort") String sortBy, @Path("window") String window, @Query("q") String query);
+    @Inject
+    OkHttpClient mOkHttpClient;
+    @Inject
+    Gson mGson;
 
-    @Headers("Authorization: Client-ID b23fe7cd378c3e0")
-    @GET("/search/{sort}/{window}/{page}")
-    Call<List<ImgurSearchResponse>> search(@Path("sort") String sortBy, @Path("window") String window, @Path("page") int page, @Query("q") String query);
+    @Inject
+    public ImgurAPI() {
+
+    }
+
+    public Observable<ImgurSearchResponse> search(ImgurSearchRequest searchRequest) {
+        Observable.fromCallable(new Callable<ImgurSearchResponse>() {
+            @Override
+            public ImgurSearchResponse call() throws Exception {
+                try {
+                    Request request = new Request.Builder().addHeader("Authorization: ", AUTHORIZATION_VALUE).build();
+                    Response response = null;
+                    response = mOkHttpClient.newCall(request).execute();
+                    if (response == null || response.body() == null)
+                        return null;    // TODO: Should return a proper error message
+
+                    return mGson.fromJson(response.body().string(), ImgurSearchResponse.class);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        });
+        return null;
+    }
 }

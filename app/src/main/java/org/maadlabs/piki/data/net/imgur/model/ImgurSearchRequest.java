@@ -8,10 +8,17 @@ import okhttp3.OkHttpClient;
 
 public class ImgurSearchRequest {
 
+    private static final String BASE_URL = "https://api.imgur.com/3/gallery";
+
+    String requestUrl;
     String query;
     SortBy sort;
     SearchWindow window;
     int page;
+
+    private ImgurSearchRequest() {
+
+    }
 
     public enum SearchWindow {
         DAY, WEEK, MONTH, YEAR, ALL
@@ -21,7 +28,7 @@ public class ImgurSearchRequest {
         TIME, VIRAL, TOP
     }
 
-    public class Builder {
+    public static class Builder {
 
         ImgurSearchRequest mSearchRequest;
 
@@ -39,6 +46,11 @@ public class ImgurSearchRequest {
             return this;
         }
 
+        public Builder page(int page) {
+            mSearchRequest.page = page;
+            return this;
+        }
+
         public Builder window(SearchWindow window) {
             mSearchRequest.window = window;
             return this;
@@ -47,5 +59,24 @@ public class ImgurSearchRequest {
         public ImgurSearchRequest build() {
             return mSearchRequest;
         }
+    }
+
+    public String buildUrl(boolean rebuild) {
+
+        if (requestUrl != null && !rebuild)
+            return requestUrl;
+
+        StringBuilder builder = new StringBuilder(BASE_URL);
+        if (sort != null)
+            builder.append("/" + sort.name());
+        if (window != null)
+            builder.append("/" + window.name());
+        if (page > 0)
+            builder.append("/" + page);
+        if (query != null)
+            builder.append("?q=" + query);
+
+        requestUrl = builder.toString();
+        return requestUrl;
     }
 }
