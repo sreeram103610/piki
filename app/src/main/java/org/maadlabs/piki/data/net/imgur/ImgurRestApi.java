@@ -21,15 +21,15 @@ import retrofit2.Retrofit;
  * Created by brainfreak on 10/16/17.
  */
 
-public class ImgurAPIClient implements RestApi{
+public class ImgurRestApi implements RestApi{
 
     //TODO: add DIs'
-    @Inject
-    Retrofit mRetrofit;
+
     @Inject
     ImgurAPI mImgurAPI;
 
-    public ImgurAPIClient() {
+    @Inject
+    public ImgurRestApi() {
     }
 
 
@@ -51,7 +51,7 @@ public class ImgurAPIClient implements RestApi{
                             imageDataList.add(imageData);
                         }
                     }
-                    return null;
+                    return imageDataList;
                 }
             });
         }

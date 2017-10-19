@@ -30,8 +30,8 @@ public class GiphyRestApi implements RestApi {
     GPHApiSync mGPHApi;
     ListMediaResponse mListMediaResponse;
 
+    @Inject
     public GiphyRestApi() {
-        DaggerGPHComponent.builder().build().inject(this);
     }
 
     @Override

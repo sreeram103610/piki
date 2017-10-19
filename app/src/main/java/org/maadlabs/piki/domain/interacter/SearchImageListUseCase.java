@@ -2,6 +2,7 @@ package org.maadlabs.piki.domain.interacter;
 
 import org.maadlabs.piki.data.repository.ImageDataRepository;
 import org.maadlabs.piki.domain.entity.ImageData;
+import org.maadlabs.piki.domain.repository.ImageRepository;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class SearchImageListUseCase extends UseCase<List<ImageData>> {
     private String mSearchKey;
 
     @Inject
-    ImageDataRepository mImageDataRepository;
+    ImageRepository mImageDataRepository;
 
     @Inject
     public SearchImageListUseCase() {
