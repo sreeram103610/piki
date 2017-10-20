@@ -13,4 +13,6 @@ import io.reactivex.Observable;
 public interface ImageDataSource {
 
     Observable<List<ImageData>> search(String query, int limit);
+
+    Observable<List<ImageData>> trending(int limit);
 }

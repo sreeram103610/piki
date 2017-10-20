@@ -12,7 +12,9 @@ import com.giphy.sdk.core.network.engine.NetworkSession;
 import com.giphy.sdk.core.network.response.ListMediaResponse;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Future;
 
 /**
  * Created by brainfreak on 10/10/17.
@@ -60,6 +62,31 @@ public class GPHApiSyncClient extends GPHApiClient implements GPHApiSync{
         try {
             return mNetworkSession.queryStringConnection(Constants.SERVER_URL,
                     String.format(Constants.Paths.SEARCH, mediaTypeToEndpoint(type)), HTTP_GET,
+                    ListMediaResponse.class, params, null).executeImmediately();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @NonNull
+    @Override
+    public ListMediaResponse trending(@Nullable MediaType type, @Nullable Integer limit, @Nullable Integer offset, @Nullable RatingType rating) {
+
+        final Map<String, String> params = new HashMap<>();
+        params.put(API_KEY, mApiKey);
+        if (limit != null) {
+            params.put("limit", limit.toString());
+        }
+        if (offset != null) {
+            params.put("offset", offset.toString());
+        }
+        if (rating != null) {
+            params.put("rating", rating.toString());
+        }
+        try {
+            return mNetworkSession.queryStringConnection(Constants.SERVER_URL,
+                    String.format(Constants.Paths.TRENDING, mediaTypeToEndpoint(type)), HTTP_GET,
                     ListMediaResponse.class, params, null).executeImmediately();
         } catch (Exception e) {
             e.printStackTrace();

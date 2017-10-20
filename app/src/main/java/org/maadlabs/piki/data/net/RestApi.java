@@ -14,4 +14,6 @@ import io.reactivex.Observable;
 public interface RestApi {
 
     Observable<List<ImageData>> imageList(String query, int limit);
+
+    Observable<List<ImageData>> trendingImagesList(int limit);
 }

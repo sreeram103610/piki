@@ -57,4 +57,9 @@ public class ImgurRestApi implements RestApi{
         }
         return null;
     }
+
+    @Override
+    public Observable<List<ImageData>> trendingImagesList(int limit) {
+        return null;
+    }
 }

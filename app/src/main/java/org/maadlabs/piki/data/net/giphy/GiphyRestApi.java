@@ -53,6 +53,22 @@ public class GiphyRestApi implements RestApi {
 
     }
 
+    @Override
+    public Observable<List<ImageData>> trendingImagesList(final int limit) {
+
+        return Observable.fromCallable(new Callable<ListMediaResponse>() {
+            @Override
+            public ListMediaResponse call() throws Exception {
+                return mGPHApi.trending(MediaType.gif, limit, null, null);
+            }
+        }).map(new Function<ListMediaResponse, List<ImageData>>() {
+            @Override
+            public List<ImageData> apply(@NonNull ListMediaResponse response) throws Exception {
+                return map(response);
+            }
+        });
+    }
+
     private List<ImageData> map(ListMediaResponse response) {
 
         if (response == null)

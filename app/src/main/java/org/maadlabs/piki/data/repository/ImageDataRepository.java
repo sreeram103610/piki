@@ -33,4 +33,9 @@ public class ImageDataRepository implements ImageRepository {
     public Observable<List<ImageData>> search(String query, int limit) {
         return mImageDataSource.search(query, limit);
     }
+
+    @Override
+    public Observable<List<ImageData>> trending(int limit) {
+        return mImageDataSource.trending(limit);
+    }
 }

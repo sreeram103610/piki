@@ -34,4 +34,15 @@ public class OnlineDataSource implements ImageDataSource {
 
         return Observable.mergeDelayError(observableList);
     }
+
+    @Override
+    public Observable<List<ImageData>> trending(int limit) {
+
+        List<Observable<List<ImageData>>> observableList = new ArrayList<>();
+        for (RestApi api : mRestApiList) {
+            observableList.add(api.trendingImagesList(limit));
+        }
+
+        return Observable.mergeDelayError(observableList);
+    }
 }
