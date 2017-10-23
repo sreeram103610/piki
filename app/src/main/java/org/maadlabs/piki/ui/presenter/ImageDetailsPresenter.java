@@ -1,11 +1,10 @@
 package org.maadlabs.piki.ui.presenter;
 
 
-import org.maadlabs.piki.data.mapper.ImageDataMapper;
 import org.maadlabs.piki.domain.entity.ImageData;
 import org.maadlabs.piki.domain.interacter.SearchImageListUseCase;
+import org.maadlabs.piki.domain.interacter.TrendingImagesUseCase;
 import org.maadlabs.piki.ui.mapper.ImageDataModelMapper;
-import org.maadlabs.piki.ui.model.ImageDataModel;
 import org.maadlabs.piki.ui.view.ImageDataViewModel;
 
 import java.util.List;
@@ -22,13 +21,17 @@ import io.reactivex.observers.DisposableObserver;
 public class ImageDetailsPresenter implements Presenter {
 
     ImageDataModelMapper mImageDataMapper;
-    SearchImageListUseCase mImageListUseCase;
+    SearchImageListUseCase mSearchImageListUseCase;
+    TrendingImagesUseCase mTrendingImagesUseCase;
+
     ImageDataViewModel mImageDataModel;
+    private ImageListObserver mImageListObserver;
 
     @Inject
-    public ImageDetailsPresenter(SearchImageListUseCase useCase, ImageDataModelMapper mapper) {
+    public ImageDetailsPresenter(SearchImageListUseCase useCase, TrendingImagesUseCase trendingImagesUseCase, ImageDataModelMapper mapper) {
         mImageDataMapper = mapper;
-        mImageListUseCase = useCase;
+        mSearchImageListUseCase = useCase;
+        mTrendingImagesUseCase = trendingImagesUseCase;
     }
 
     public void setView(ImageDataViewModel model) {
@@ -55,16 +58,20 @@ public class ImageDetailsPresenter implements Presenter {
         mImageDataModel.showError(error);
     }
 
+    private void hideErrorMessage() { mImageDataModel.hideErrorMessage(); }
+
     public void init() {
 
-        hideViewLoading();
+        showViewLoading();
         hideViewRetry();
+        mImageListObserver = new ImageListObserver();
+        mTrendingImagesUseCase.execute(mImageListObserver);
     }
 
     private void getImageList(String query) {
-        ImageListObserver observer = new ImageListObserver();
-        mImageListUseCase.setQuery(query);
-        mImageListUseCase.execute(observer);
+        mImageListObserver = new ImageListObserver();
+        mSearchImageListUseCase.setQuery(query);
+        mSearchImageListUseCase.execute(mImageListObserver);
     }
 
     private void showImageList(List<ImageData> imageList) {
@@ -83,13 +90,19 @@ public class ImageDetailsPresenter implements Presenter {
 
     @Override
     public void destory() {
-        mImageListUseCase.removeObserver();
+        mSearchImageListUseCase.removeObserver();
+        mTrendingImagesUseCase.removeObserver();
     }
 
     public void onSearchQuery(String query) {
         hideViewRetry();
         showViewLoading();
+        hideImages();
         getImageList(query);
+    }
+
+    private void hideImages() {
+        mImageDataModel.hideImages();
     }
 
     private final class ImageListObserver extends DisposableObserver<List<ImageData>> {

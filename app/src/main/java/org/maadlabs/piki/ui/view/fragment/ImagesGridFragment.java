@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.maadlabs.piki.R;
+import org.maadlabs.piki.data.di.GPHModule;
+import org.maadlabs.piki.data.di.ImageDataRepositoryModule;
 import org.maadlabs.piki.ui.di.DaggerImagesGridComponent;
 import org.maadlabs.piki.ui.di.ImagesGridComponent;
 import org.maadlabs.piki.ui.di.ImagesGridModule;
@@ -72,7 +74,9 @@ public class ImagesGridFragment extends Fragment implements ImageDataViewModel, 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        DaggerImagesGridComponent.builder().imagesGridModule(new ImagesGridModule(getContext())).build().inject(this);
+        DaggerImagesGridComponent.builder().imageDataRepositoryModule(new ImageDataRepositoryModule())
+                .imagesGridModule(new ImagesGridModule(getContext()))
+                .build().inject(this);
         initViews();
         mPresenter.setView(this);
         mPresenter.init();
@@ -85,6 +89,7 @@ public class ImagesGridFragment extends Fragment implements ImageDataViewModel, 
 
     @Override
     public void loadImages(List<ImageDataModel> imageList) {
+        mImagesRecyclerView.setVisibility(View.VISIBLE);
         mImagesListAdapter.setCollection(imageList);
     }
 
@@ -116,6 +121,16 @@ public class ImagesGridFragment extends Fragment implements ImageDataViewModel, 
     @Override
     public void init() {
 
+    }
+
+    @Override
+    public void hideErrorMessage() {
+        mLoadingInterface.hideError();
+    }
+
+    @Override
+    public void hideImages() {
+        mImagesRecyclerView.setVisibility(View.GONE);
     }
 
     @Override

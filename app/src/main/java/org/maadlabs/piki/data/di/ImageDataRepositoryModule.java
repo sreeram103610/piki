@@ -12,6 +12,7 @@ import org.maadlabs.piki.domain.repository.ImageRepository;
 import java.util.ArrayList;
 import java.util.List;
 
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 
@@ -23,12 +24,10 @@ import dagger.Provides;
 public class ImageDataRepositoryModule {
 
     @Provides
-    ImageDataSource imageDataSource() {
-        return new OnlineDataSource();
-    }
+    ImageDataSource imageSource(OnlineDataSource source) { return source; }
 
     @Provides
-    ImageRepository imageRepository(ImageDataSourceFactory factory) { return new ImageDataRepository(factory); }
+    ImageRepository imageRepository(ImageDataRepository repository) { return repository; }
 
     @Provides
     List<RestApi> restApis(GiphyRestApi giphyRestApi, ImgurRestApi imgurRestApi) {

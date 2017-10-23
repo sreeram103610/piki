@@ -21,6 +21,7 @@ public class OnlineDataSource implements ImageDataSource {
     @Inject
     List<RestApi> mRestApiList;
 
+    @Inject
     public OnlineDataSource() {
     }
 
@@ -40,7 +41,9 @@ public class OnlineDataSource implements ImageDataSource {
 
         List<Observable<List<ImageData>>> observableList = new ArrayList<>();
         for (RestApi api : mRestApiList) {
-            observableList.add(api.trendingImagesList(limit));
+            Observable<List<ImageData>> images = api.trendingImagesList(limit);
+            if (images != null)
+                observableList.add(api.trendingImagesList(limit));
         }
 
         return Observable.mergeDelayError(observableList);

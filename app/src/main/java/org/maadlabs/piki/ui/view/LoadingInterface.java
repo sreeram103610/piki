@@ -11,4 +11,6 @@ public interface LoadingInterface {
     void showRetry();
     void hideRetry();
     void showError(String message);
+
+    void hideError();
 }

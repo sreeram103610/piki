@@ -57,4 +57,9 @@ public class MainActivity extends AppCompatActivity implements LoadingInterface 
         mRetryInfoTextView.setText(message);
         mRetryLinearLayout.setVisibility(View.VISIBLE);
     }
+
+    @Override
+    public void hideError() {
+        mRetryInfoTextView.setVisibility(View.GONE);
+    }
 }

@@ -15,6 +15,8 @@ import io.reactivex.Observable;
 
 public class TrendingImagesUseCase extends UseCase<List<ImageData>> {
 
+    private static final int SEARCH_LIMIT = 10;
+
     @Inject
     ImageRepository mImageDataRepository;
 
@@ -25,6 +27,7 @@ public class TrendingImagesUseCase extends UseCase<List<ImageData>> {
 
     @Override
     protected Observable<List<ImageData>> buildObservable() {
-        return mImageDataRepository.trending();
+        return mImageDataRepository.trending(SEARCH_LIMIT);
     }
+
 }

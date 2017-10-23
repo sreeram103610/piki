@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
 
+import javax.inject.Inject;
+
 /**
  * Created by brainfreak on 10/10/17.
  */
@@ -69,7 +71,7 @@ public class GPHApiSyncClient extends GPHApiClient implements GPHApiSync{
         return null;
     }
 
-    @NonNull
+    @Nullable
     @Override
     public ListMediaResponse trending(@Nullable MediaType type, @Nullable Integer limit, @Nullable Integer offset, @Nullable RatingType rating) {
 
@@ -85,9 +87,10 @@ public class GPHApiSyncClient extends GPHApiClient implements GPHApiSync{
             params.put("rating", rating.toString());
         }
         try {
-            return mNetworkSession.queryStringConnection(Constants.SERVER_URL,
+            ListMediaResponse response =  mNetworkSession.queryStringConnection(Constants.SERVER_URL,
                     String.format(Constants.Paths.TRENDING, mediaTypeToEndpoint(type)), HTTP_GET,
                     ListMediaResponse.class, params, null).executeImmediately();
+            return response;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -101,5 +104,9 @@ public class GPHApiSyncClient extends GPHApiClient implements GPHApiSync{
         } else {
             return "gifs";
         }
+    }
+
+    public void setApiKey(String apiKey) {
+        mApiKey = apiKey;
     }
 }

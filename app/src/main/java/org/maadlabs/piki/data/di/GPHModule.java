@@ -1,6 +1,7 @@
 package org.maadlabs.piki.data.di;
 
 import com.giphy.sdk.core.network.api.GPHApiClient;
+import com.google.gson.Gson;
 
 import org.maadlabs.piki.data.net.RestApi;
 import org.maadlabs.piki.data.net.giphy.GPHApiSync;
@@ -9,6 +10,7 @@ import org.maadlabs.piki.data.net.giphy.GiphyRestApi;
 
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.OkHttpClient;
 
 /**
  * Created by brainfreak on 10/10/17.
@@ -21,7 +23,19 @@ public class GPHModule {
 
     @Provides
     GPHApiSync client() {
-        return new GPHApiSyncClient(API_KEY);
+        GPHApiSyncClient client = new GPHApiSyncClient(API_KEY);
+        return client;
     }
 
+    @Provides
+    OkHttpClient okhttpClient() {
+        OkHttpClient client = new OkHttpClient();
+        return client;
+    }
+
+    @Provides
+    Gson gson() {
+        Gson gson = new Gson();
+        return gson;
+    }
 }

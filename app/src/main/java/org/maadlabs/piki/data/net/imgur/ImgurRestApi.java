@@ -23,8 +23,6 @@ import retrofit2.Retrofit;
 
 public class ImgurRestApi implements RestApi{
 
-    //TODO: add DIs'
-
     @Inject
     ImgurAPI mImgurAPI;
 

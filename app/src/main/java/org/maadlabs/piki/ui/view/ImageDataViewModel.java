@@ -20,4 +20,8 @@ public interface ImageDataViewModel {
     void showError(String errorMessage);
 
     void init();
+
+    void hideErrorMessage();
+
+    void hideImages();
 }

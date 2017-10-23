@@ -24,7 +24,7 @@ public abstract class UseCase<T> {
     }
 
     public void removeObserver() {
-        if (!mDisposableObserver.isDisposed())
+        if (mDisposableObserver != null && !mDisposableObserver.isDisposed())
             mDisposableObserver.dispose();
     }
 
