@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 
 import org.maadlabs.piki.R;
 import org.maadlabs.piki.ui.model.ImageDataModel;
@@ -44,7 +46,8 @@ public class ImagesListAdapter extends RecyclerView.Adapter<ImagesListAdapter.Ho
     public void onBindViewHolder(Holder holder, int position) {
 
         ImageDataModel dataModel = mImageDataModelList.get(position);
-        Glide.with(mContext).load(dataModel.getUri()).into(holder.imageView);
+        RequestOptions options = new RequestOptions().fitCenter().diskCacheStrategy(DiskCacheStrategy.DATA);
+        Glide.with(mContext).setDefaultRequestOptions(options).load(dataModel.getUri()).into(holder.imageView);
     }
 
     @Override

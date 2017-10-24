@@ -64,12 +64,14 @@ public class ImageDetailsPresenter implements Presenter {
 
         showViewLoading();
         hideViewRetry();
-        mImageListObserver = new ImageListObserver();
+        if (mImageListObserver == null)
+            mImageListObserver = new ImageListObserver();
         mTrendingImagesUseCase.execute(mImageListObserver);
     }
 
     private void getImageList(String query) {
-        mImageListObserver = new ImageListObserver();
+        if (mImageListObserver == null)
+            mImageListObserver = new ImageListObserver();
         mSearchImageListUseCase.setQuery(query);
         mSearchImageListUseCase.execute(mImageListObserver);
     }
@@ -109,12 +111,15 @@ public class ImageDetailsPresenter implements Presenter {
 
         @Override
         public void onNext(@NonNull List<ImageData> imageDatas) {
+            hideViewLoading();
+            hideViewRetry();
             showImageList(imageDatas);
         }
 
         @Override
         public void onError(@NonNull Throwable e) {
             hideViewLoading();
+            hideImages();
             showErrorMessage(e.getMessage());
             showViewRetry();
         }
@@ -122,6 +127,7 @@ public class ImageDetailsPresenter implements Presenter {
         @Override
         public void onComplete() {
             hideViewLoading();
+
         }
     }
 }

@@ -8,6 +8,8 @@ import org.maadlabs.piki.data.net.giphy.GPHApiSync;
 import org.maadlabs.piki.data.net.giphy.GPHApiSyncClient;
 import org.maadlabs.piki.data.net.giphy.GiphyRestApi;
 
+import javax.inject.Named;
+
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
@@ -17,9 +19,13 @@ import okhttp3.OkHttpClient;
  */
 
 @Module
-public class GPHModule {
+public class ApiModule {
 
     String API_KEY = "aA9LxtTbUJTfx9ujghPgaJLhZP9sW8uw";
+
+    @Provides
+    @Named("imgur_base_url")
+    static String imgurUrl() { return "https://api.imgur.com/3/gallery"; }
 
     @Provides
     GPHApiSync client() {

@@ -32,7 +32,7 @@ public class ImgurRestApi implements RestApi{
 
 
     @Override
-    public Observable<List<ImageData>> imageList(String query, int limit) {
+    public Observable<List<ImageData>> searchImagesList(String query, int limit) {
         ImgurSearchRequest request = new ImgurSearchRequest.Builder().query(query).build();
         Observable<ImgurSearchResponse> response = mImgurAPI.search(request);
         if (response != null) {

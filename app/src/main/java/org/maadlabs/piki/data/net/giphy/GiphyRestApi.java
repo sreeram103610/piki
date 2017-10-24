@@ -33,7 +33,7 @@ public class GiphyRestApi implements RestApi {
     }
 
     @Override
-    public Observable<List<ImageData>> imageList(final String query, final int limit) {
+    public Observable<List<ImageData>> searchImagesList(final String query, final int limit) {
 
         return Observable.fromCallable(new Callable<ListMediaResponse>() {
 

@@ -13,10 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.maadlabs.piki.R;
-import org.maadlabs.piki.data.di.GPHModule;
 import org.maadlabs.piki.data.di.ImageDataRepositoryModule;
 import org.maadlabs.piki.ui.di.DaggerImagesGridComponent;
-import org.maadlabs.piki.ui.di.ImagesGridComponent;
 import org.maadlabs.piki.ui.di.ImagesGridModule;
 import org.maadlabs.piki.ui.model.ImageDataModel;
 import org.maadlabs.piki.ui.presenter.ImageDetailsPresenter;

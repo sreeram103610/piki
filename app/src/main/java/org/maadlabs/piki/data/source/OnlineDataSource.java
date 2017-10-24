@@ -9,8 +9,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
 
 /**
  * Created by brainfreak on 10/10/17.
@@ -30,7 +28,9 @@ public class OnlineDataSource implements ImageDataSource {
 
         List<Observable<List<ImageData>>> observableList = new ArrayList<>();
         for (RestApi api : mRestApiList) {
-            observableList.add(api.imageList(query, limit));
+            Observable<List<ImageData>> images = api.searchImagesList(query, limit);
+            if (images != null)
+                observableList.add(images);
         }
 
         return Observable.mergeDelayError(observableList);
@@ -43,7 +43,7 @@ public class OnlineDataSource implements ImageDataSource {
         for (RestApi api : mRestApiList) {
             Observable<List<ImageData>> images = api.trendingImagesList(limit);
             if (images != null)
-                observableList.add(api.trendingImagesList(limit));
+                observableList.add(images);
         }
 
         return Observable.mergeDelayError(observableList);

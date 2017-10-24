@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import io.reactivex.Observable;
 import okhttp3.Call;
@@ -31,18 +32,20 @@ public class ImgurAPI {
     OkHttpClient mOkHttpClient;
     @Inject
     Gson mGson;
+    @Named("imgur_base_url")
+    String mUrl;
 
     @Inject
     public ImgurAPI() {
-
     }
 
-    public Observable<ImgurSearchResponse> search(ImgurSearchRequest searchRequest) {
-        Observable.fromCallable(new Callable<ImgurSearchResponse>() {
+    public Observable<ImgurSearchResponse> search(final ImgurSearchRequest searchRequest) {
+        return Observable.fromCallable(new Callable<ImgurSearchResponse>() {
             @Override
             public ImgurSearchResponse call() throws Exception {
                 try {
-                    Request request = new Request.Builder().addHeader("Authorization: ", AUTHORIZATION_VALUE).build();
+                    Request request = new Request.Builder().url(mUrl + searchRequest.buildUrl(true)).addHeader("Authorization: ", AUTHORIZATION_VALUE).build();
+
                     Response response = null;
                     response = mOkHttpClient.newCall(request).execute();
                     if (response == null || response.body() == null)
@@ -55,6 +58,5 @@ public class ImgurAPI {
                 return null;
             }
         });
-        return null;
     }
 }
