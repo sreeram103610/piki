@@ -44,6 +44,8 @@ public class ImgurRestApi implements RestApi{
 
                     for (ImgurSearchResponseData data : imgurSearchResponseDataList) {
                         List<ImgurImage> images = data.getImages();
+                        if (images == null)
+                            continue;
                         for (ImgurImage imgurImage : images) {
                             ImageData imageData = new ImageData(imgurImage.getImageUrl());
                             imageDataList.add(imageData);

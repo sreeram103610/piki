@@ -32,6 +32,7 @@ public class ImgurAPI {
     OkHttpClient mOkHttpClient;
     @Inject
     Gson mGson;
+    @Inject
     @Named("imgur_base_url")
     String mUrl;
 
@@ -44,14 +45,15 @@ public class ImgurAPI {
             @Override
             public ImgurSearchResponse call() throws Exception {
                 try {
-                    Request request = new Request.Builder().url(mUrl + searchRequest.buildUrl(true)).addHeader("Authorization: ", AUTHORIZATION_VALUE).build();
+                    Request request = new Request.Builder().url(mUrl + searchRequest.buildUrl(true)).addHeader("Authorization", AUTHORIZATION_VALUE).build();
 
                     Response response = null;
                     response = mOkHttpClient.newCall(request).execute();
                     if (response == null || response.body() == null)
                         return null;    // TODO: Should return a proper error message
-
-                    return mGson.fromJson(response.body().string(), ImgurSearchResponse.class);
+                    if(response.code() == 200)
+                        return mGson.fromJson(response.body().string(), ImgurSearchResponse.class);
+                    return null;        // TODO: Should return a proper error message
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

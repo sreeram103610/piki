@@ -34,6 +34,7 @@ import butterknife.ButterKnife;
  */
 public class ImagesGridFragment extends Fragment implements ImageDataViewModel, SearchView.OnQueryTextListener {
 
+    public static final String TAG = "ImagesGridFragment";
     @BindView(R.id.images_recyclerview) RecyclerView mImagesRecyclerView;
     @BindView(R.id.image_search_view) SearchView mSearchView;
 
@@ -135,6 +136,7 @@ public class ImagesGridFragment extends Fragment implements ImageDataViewModel, 
     public boolean onQueryTextSubmit(String query) {
 
         mPresenter.onSearchQuery(query);
+        mSearchView.clearFocus();
         return true;
     }
 
@@ -160,4 +162,5 @@ public class ImagesGridFragment extends Fragment implements ImageDataViewModel, 
         super.onDestroy();
         mPresenter.destory();
     }
+
 }

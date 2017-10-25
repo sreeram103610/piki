@@ -8,8 +8,8 @@ import okhttp3.OkHttpClient;
 
 public class ImgurSearchRequest {
 
-    private static final String BASE_URL = "https://api.imgur.com/3/gallery";
 
+    private static final String BASE_URL = "/3/gallery/search";
     String requestUrl;
     String query;
     SortBy sort;

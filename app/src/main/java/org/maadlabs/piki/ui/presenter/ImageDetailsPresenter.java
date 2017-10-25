@@ -1,12 +1,15 @@
 package org.maadlabs.piki.ui.presenter;
 
 
+import android.util.Log;
+
 import org.maadlabs.piki.domain.entity.ImageData;
 import org.maadlabs.piki.domain.interacter.SearchImageListUseCase;
 import org.maadlabs.piki.domain.interacter.TrendingImagesUseCase;
 import org.maadlabs.piki.ui.mapper.ImageDataModelMapper;
 import org.maadlabs.piki.ui.view.ImageDataViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -64,14 +67,12 @@ public class ImageDetailsPresenter implements Presenter {
 
         showViewLoading();
         hideViewRetry();
-        if (mImageListObserver == null)
-            mImageListObserver = new ImageListObserver();
+        mImageListObserver = new ImageListObserver();
         mTrendingImagesUseCase.execute(mImageListObserver);
     }
 
     private void getImageList(String query) {
-        if (mImageListObserver == null)
-            mImageListObserver = new ImageListObserver();
+        mImageListObserver = new ImageListObserver();
         mSearchImageListUseCase.setQuery(query);
         mSearchImageListUseCase.execute(mImageListObserver);
     }
@@ -109,11 +110,11 @@ public class ImageDetailsPresenter implements Presenter {
 
     private final class ImageListObserver extends DisposableObserver<List<ImageData>> {
 
+        private List<ImageData> mImageDataList = new ArrayList<>();
+
         @Override
         public void onNext(@NonNull List<ImageData> imageDatas) {
-            hideViewLoading();
-            hideViewRetry();
-            showImageList(imageDatas);
+            mImageDataList.addAll(imageDatas);
         }
 
         @Override
@@ -127,7 +128,8 @@ public class ImageDetailsPresenter implements Presenter {
         @Override
         public void onComplete() {
             hideViewLoading();
-
+            hideViewRetry();
+            showImageList(mImageDataList);
         }
     }
 }

@@ -57,6 +57,8 @@ public class ImgurImage {
             url = mp4Url;
         } else if (type.contains("gif")) {
             url = gifvUrl;
+            if(gifvUrl.endsWith(".gifv"))   // Remove v from the end
+                url = gifvUrl.substring(0, gifvUrl.length() - 1);
         } else {
             url = linkUrl;
         }

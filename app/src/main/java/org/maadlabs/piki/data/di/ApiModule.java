@@ -25,7 +25,7 @@ public class ApiModule {
 
     @Provides
     @Named("imgur_base_url")
-    static String imgurUrl() { return "https://api.imgur.com/3/gallery"; }
+    static String imgurUrl() { return "https://api.imgur.com"; }
 
     @Provides
     GPHApiSync client() {

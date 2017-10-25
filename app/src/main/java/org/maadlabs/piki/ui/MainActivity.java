@@ -1,5 +1,6 @@
 package org.maadlabs.piki.ui;
 
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -23,13 +24,21 @@ public class MainActivity extends AppCompatActivity implements LoadingInterface 
     @BindView(R.id.loading_progress_bar)
     ProgressBar mLoadingProgressBar;
 
+    FragmentManager mFragmentManager;
+    ImagesGridFragment mGridFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
-        getSupportFragmentManager().beginTransaction().add(android.R.id.content, new ImagesGridFragment()).commit();
+
+        mFragmentManager = getSupportFragmentManager();
+        if ((mGridFragment = (ImagesGridFragment) mFragmentManager.findFragmentByTag(ImagesGridFragment.TAG)) == null) {
+            mGridFragment = new ImagesGridFragment();
+            getSupportFragmentManager().beginTransaction().add(android.R.id.content, mGridFragment, ImagesGridFragment.TAG).commit();
+        }
     }
 
     @Override
