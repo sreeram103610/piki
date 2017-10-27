@@ -1,16 +1,28 @@
 package org.maadlabs.piki.ui;
 
+import android.app.SearchManager;
+import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.maadlabs.piki.R;
+import org.maadlabs.piki.data.di.ImageDataRepositoryModule;
+import org.maadlabs.piki.ui.di.DaggerImagesGridComponent;
+import org.maadlabs.piki.ui.di.ImagesGridModule;
+import org.maadlabs.piki.ui.navigator.Navigator;
 import org.maadlabs.piki.ui.view.LoadingInterface;
-import org.maadlabs.piki.ui.view.fragment.ImagesGridFragment;
+import org.maadlabs.piki.ui.view.fragment.TrendingImagesFragment;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,9 +35,11 @@ public class MainActivity extends AppCompatActivity implements LoadingInterface 
     TextView mRetryInfoTextView;
     @BindView(R.id.loading_progress_bar)
     ProgressBar mLoadingProgressBar;
+    @Inject
+    Navigator mNavigator;
 
     FragmentManager mFragmentManager;
-    ImagesGridFragment mGridFragment;
+    TrendingImagesFragment mGridFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +48,10 @@ public class MainActivity extends AppCompatActivity implements LoadingInterface 
 
         ButterKnife.bind(this);
 
-        mFragmentManager = getSupportFragmentManager();
-        if ((mGridFragment = (ImagesGridFragment) mFragmentManager.findFragmentByTag(ImagesGridFragment.TAG)) == null) {
-            mGridFragment = new ImagesGridFragment();
-            getSupportFragmentManager().beginTransaction().add(android.R.id.content, mGridFragment, ImagesGridFragment.TAG).commit();
-        }
+        DaggerImagesGridComponent.builder().imageDataRepositoryModule(new ImageDataRepositoryModule())
+                .imagesGridModule(new ImagesGridModule(this))
+                .build().inject(this);
+        mNavigator.navigateToTrendingView(this);
     }
 
     @Override
@@ -70,5 +83,25 @@ public class MainActivity extends AppCompatActivity implements LoadingInterface 
     @Override
     public void hideError() {
         mRetryInfoTextView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_options_menu, menu);
+
+        SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
+        return true;
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            new Navigator().navigateToSearchView(this, query);
+        }
     }
 }

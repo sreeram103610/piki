@@ -2,4 +2,9 @@
     <string name="app_name">piki</string>
     <string name="retry_button">Retry</string>
     <string name="retry_default_text">Image loading failed. Try Again.</string>
+    <string name="search_title">Search</string>
+    <string name="search_hint">Search images</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

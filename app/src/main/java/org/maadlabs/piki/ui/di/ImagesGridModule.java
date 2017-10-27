@@ -1,9 +1,11 @@
 package org.maadlabs.piki.ui.di;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 
-import org.maadlabs.piki.ui.view.adapter.ImagesListAdapter;
+import org.maadlabs.piki.ui.view.SearchableViewModel;
+import org.maadlabs.piki.ui.view.TrendingDataViewModel;
+import org.maadlabs.piki.ui.view.fragment.SearchFragment;
+import org.maadlabs.piki.ui.view.fragment.TrendingImagesFragment;
 
 import dagger.Module;
 import dagger.Provides;
@@ -26,4 +28,13 @@ public class ImagesGridModule {
         return context;
     }
 
+    @Provides
+    TrendingDataViewModel treding() {
+        return new TrendingImagesFragment();
+    }
+
+    @Provides
+    SearchableViewModel searchable() {
+        return new SearchFragment();
+    }
 }

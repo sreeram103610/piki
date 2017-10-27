@@ -9,7 +9,7 @@ import java.util.List;
  * Created by brainfreak on 10/12/17.
  */
 
-public interface ImageDataViewModel {
+public interface TrendingDataViewModel {
 
     void onImageClicked(int imageId);
     void loadImages(List<ImageDataModel> imageList);

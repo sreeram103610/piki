@@ -1,13 +1,10 @@
 package org.maadlabs.piki.ui.presenter;
 
 
-import android.util.Log;
-
 import org.maadlabs.piki.domain.entity.ImageData;
-import org.maadlabs.piki.domain.interacter.SearchImageListUseCase;
 import org.maadlabs.piki.domain.interacter.TrendingImagesUseCase;
 import org.maadlabs.piki.ui.mapper.ImageDataModelMapper;
-import org.maadlabs.piki.ui.view.ImageDataViewModel;
+import org.maadlabs.piki.ui.view.TrendingDataViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,20 +21,18 @@ import io.reactivex.observers.DisposableObserver;
 public class ImageDetailsPresenter implements Presenter {
 
     ImageDataModelMapper mImageDataMapper;
-    SearchImageListUseCase mSearchImageListUseCase;
     TrendingImagesUseCase mTrendingImagesUseCase;
 
-    ImageDataViewModel mImageDataModel;
+    TrendingDataViewModel mImageDataModel;
     private ImageListObserver mImageListObserver;
 
     @Inject
-    public ImageDetailsPresenter(SearchImageListUseCase useCase, TrendingImagesUseCase trendingImagesUseCase, ImageDataModelMapper mapper) {
+    public ImageDetailsPresenter(TrendingImagesUseCase trendingImagesUseCase, ImageDataModelMapper mapper) {
         mImageDataMapper = mapper;
-        mSearchImageListUseCase = useCase;
         mTrendingImagesUseCase = trendingImagesUseCase;
     }
 
-    public void setView(ImageDataViewModel model) {
+    public void setView(TrendingDataViewModel model) {
         mImageDataModel = model;
     }
 
@@ -73,8 +68,6 @@ public class ImageDetailsPresenter implements Presenter {
 
     private void getImageList(String query) {
         mImageListObserver = new ImageListObserver();
-        mSearchImageListUseCase.setQuery(query);
-        mSearchImageListUseCase.execute(mImageListObserver);
     }
 
     private void showImageList(List<ImageData> imageList) {
@@ -93,15 +86,7 @@ public class ImageDetailsPresenter implements Presenter {
 
     @Override
     public void destory() {
-        mSearchImageListUseCase.removeObserver();
         mTrendingImagesUseCase.removeObserver();
-    }
-
-    public void onSearchQuery(String query) {
-        hideViewRetry();
-        showViewLoading();
-        hideImages();
-        getImageList(query);
     }
 
     private void hideImages() {

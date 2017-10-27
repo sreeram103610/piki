@@ -2,7 +2,8 @@ package org.maadlabs.piki.ui.di;
 
 import org.maadlabs.piki.data.di.ApiModule;
 import org.maadlabs.piki.data.di.ImageDataRepositoryModule;
-import org.maadlabs.piki.ui.view.fragment.ImagesGridFragment;
+import org.maadlabs.piki.ui.MainActivity;
+import org.maadlabs.piki.ui.view.fragment.TrendingImagesFragment;
 
 import dagger.Component;
 
@@ -13,5 +14,5 @@ import dagger.Component;
 @Component(modules = {ImagesGridModule.class, ApiModule.class, ImageDataRepositoryModule.class})
 public interface ImagesGridComponent {
 
-    void inject(ImagesGridFragment fragment);
+    void inject(MainActivity activity);
 }

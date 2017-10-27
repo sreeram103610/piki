@@ -1,13 +1,12 @@
 package org.maadlabs.piki.ui.view.fragment;
 
-
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +17,9 @@ import org.maadlabs.piki.ui.di.DaggerImagesGridComponent;
 import org.maadlabs.piki.ui.di.ImagesGridModule;
 import org.maadlabs.piki.ui.model.ImageDataModel;
 import org.maadlabs.piki.ui.presenter.ImageDetailsPresenter;
-import org.maadlabs.piki.ui.view.ImageDataViewModel;
+import org.maadlabs.piki.ui.presenter.SearchImagesPresenter;
 import org.maadlabs.piki.ui.view.LoadingInterface;
+import org.maadlabs.piki.ui.view.SearchableViewModel;
 import org.maadlabs.piki.ui.view.adapter.ImagesListAdapter;
 
 import java.util.List;
@@ -29,41 +29,57 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class ImagesGridFragment extends Fragment implements ImageDataViewModel, SearchView.OnQueryTextListener {
+
+public class SearchFragment extends Fragment implements SearchableViewModel{
+
 
     public static final String TAG = "ImagesGridFragment";
-    @BindView(R.id.images_recyclerview) RecyclerView mImagesRecyclerView;
-    @BindView(R.id.image_search_view) SearchView mSearchView;
+    @BindView(R.id.images_recyclerview)
+    RecyclerView mImagesRecyclerView;
 
     @Inject
     ImagesListAdapter mImagesListAdapter;
     @Inject
     Context mContext;
     @Inject
-    ImageDetailsPresenter mPresenter;
+    SearchImagesPresenter mPresenter;
 
     LoadingInterface mLoadingInterface;
 
-    public ImagesGridFragment() {
+    public SearchFragment() {
         // Required empty public constructor
     }
 
 
+    public static SearchFragment newInstance() {
+        SearchFragment fragment = new SearchFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
         View view = inflater.inflate(R.layout.fragment_image_grid, container, false);
         ButterKnife.setDebug(true);
         ButterKnife.bind(this, view);
-        mSearchView.setOnQueryTextListener(this);
         mLoadingInterface = (LoadingInterface) getActivity();
         return view;
     }
+
+    @Override
+    public void setQuery(String query) {
+
+        mPresenter.onSearchQuery(query);
+    }
+
 
     private void initViews() {
         mImagesRecyclerView.setLayoutManager(new GridLayoutManager(mContext, 2));
@@ -73,9 +89,7 @@ public class ImagesGridFragment extends Fragment implements ImageDataViewModel, 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        DaggerImagesGridComponent.builder().imageDataRepositoryModule(new ImageDataRepositoryModule())
-                .imagesGridModule(new ImagesGridModule(getContext()))
-                .build().inject(this);
+
         initViews();
         mPresenter.setView(this);
         mPresenter.init();
@@ -132,18 +146,6 @@ public class ImagesGridFragment extends Fragment implements ImageDataViewModel, 
         mImagesRecyclerView.setVisibility(View.GONE);
     }
 
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-
-        mPresenter.onSearchQuery(query);
-        mSearchView.clearFocus();
-        return true;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        return false;
-    }
 
     @Override
     public void onPause() {
