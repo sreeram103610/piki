@@ -1,22 +1,22 @@
 package org.maadlabs.piki.ui.view.fragment;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.maadlabs.piki.R;
+import org.maadlabs.piki.data.di.ApiModule;
 import org.maadlabs.piki.data.di.ImageDataRepositoryModule;
-import org.maadlabs.piki.ui.di.DaggerImagesGridComponent;
-import org.maadlabs.piki.ui.di.ImagesGridModule;
+import org.maadlabs.piki.ui.di.DaggerFragmentComponent;
+import org.maadlabs.piki.ui.di.MyModule;
 import org.maadlabs.piki.ui.model.ImageDataModel;
-import org.maadlabs.piki.ui.presenter.ImageDetailsPresenter;
 import org.maadlabs.piki.ui.presenter.SearchImagesPresenter;
 import org.maadlabs.piki.ui.view.LoadingInterface;
 import org.maadlabs.piki.ui.view.SearchableViewModel;
@@ -33,7 +33,6 @@ import butterknife.ButterKnife;
 public class SearchFragment extends Fragment implements SearchableViewModel{
 
 
-    public static final String TAG = "ImagesGridFragment";
     @BindView(R.id.images_recyclerview)
     RecyclerView mImagesRecyclerView;
 
@@ -45,6 +44,7 @@ public class SearchFragment extends Fragment implements SearchableViewModel{
     SearchImagesPresenter mPresenter;
 
     LoadingInterface mLoadingInterface;
+    private String mSearchQuery;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -77,7 +77,9 @@ public class SearchFragment extends Fragment implements SearchableViewModel{
     @Override
     public void setQuery(String query) {
 
-        mPresenter.onSearchQuery(query);
+        mSearchQuery = query;
+        if (mPresenter != null) // Fragment already on top
+            mPresenter.onSearchQuery(query);
     }
 
 
@@ -90,9 +92,13 @@ public class SearchFragment extends Fragment implements SearchableViewModel{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        DaggerFragmentComponent.builder().apiModule(new ApiModule()).imageDataRepositoryModule(new ImageDataRepositoryModule())
+                .myModule(new MyModule(getContext())).build().inject(this);
         initViews();
         mPresenter.setView(this);
         mPresenter.init();
+        if (mSearchQuery != null)
+            mPresenter.onSearchQuery(mSearchQuery);
     }
 
     @Override
@@ -102,6 +108,7 @@ public class SearchFragment extends Fragment implements SearchableViewModel{
 
     @Override
     public void loadImages(List<ImageDataModel> imageList) {
+        Log.i("onLoad", "Images");
         mImagesRecyclerView.setVisibility(View.VISIBLE);
         mImagesListAdapter.setCollection(imageList);
     }
@@ -164,5 +171,6 @@ public class SearchFragment extends Fragment implements SearchableViewModel{
         super.onDestroy();
         mPresenter.destory();
     }
+
 
 }

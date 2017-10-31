@@ -12,9 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.maadlabs.piki.R;
+import org.maadlabs.piki.data.di.ApiModule;
 import org.maadlabs.piki.data.di.ImageDataRepositoryModule;
-import org.maadlabs.piki.ui.di.DaggerImagesGridComponent;
-import org.maadlabs.piki.ui.di.ImagesGridModule;
+import org.maadlabs.piki.ui.di.DaggerFragmentComponent;
+import org.maadlabs.piki.ui.di.MyModule;
 import org.maadlabs.piki.ui.model.ImageDataModel;
 import org.maadlabs.piki.ui.presenter.ImageDetailsPresenter;
 import org.maadlabs.piki.ui.view.TrendingDataViewModel;
@@ -33,7 +34,7 @@ import butterknife.ButterKnife;
  */
 public class TrendingImagesFragment extends Fragment implements TrendingDataViewModel {
 
-    public static final String TAG = "ImagesGridFragment";
+    public static final String TAG = "TrendingImagesFragment";
     @BindView(R.id.images_recyclerview) RecyclerView mImagesRecyclerView;
 
     @Inject
@@ -70,6 +71,8 @@ public class TrendingImagesFragment extends Fragment implements TrendingDataView
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        DaggerFragmentComponent.builder().apiModule(new ApiModule()).imageDataRepositoryModule(new ImageDataRepositoryModule())
+                .myModule(new MyModule(getContext())).build().inject(this);
         initViews();
         mPresenter.setView(this);
         mPresenter.init();

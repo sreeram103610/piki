@@ -17,17 +17,20 @@ import io.reactivex.observers.DisposableObserver;
  * Created by brainfreak on 10/26/17.
  */
 
-public class SearchImagesPresenter implements Presenter {
+public class SearchImagesPresenter implements Presenter<SearchableViewModel> {
 
     SearchImageListUseCase mSearchImageListUseCase;
     SearchableViewModel mSearchableViewModel;
     SearchObserver mImageListObserver;
+    @Inject
     ImageDataModelMapper mImageDataModelMapper;
 
     @Inject
     public SearchImagesPresenter(SearchImageListUseCase useCase) {
         mSearchImageListUseCase = useCase;
     }
+
+    @Override
     public void setView(SearchableViewModel model) {
         mSearchableViewModel = model;
     }
@@ -58,8 +61,6 @@ public class SearchImagesPresenter implements Presenter {
 
         showViewLoading();
         hideViewRetry();
-        mImageListObserver = new SearchObserver();
-        mSearchImageListUseCase.execute(mImageListObserver);
     }
 
     private void getImageList(String query) {

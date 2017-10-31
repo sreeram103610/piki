@@ -11,6 +11,8 @@ import java.util.List;
 
 public interface TrendingDataViewModel {
 
+    String TAG = "TrendingDataViewModel";
+
     void onImageClicked(int imageId);
     void loadImages(List<ImageDataModel> imageList);
     void showLoading();

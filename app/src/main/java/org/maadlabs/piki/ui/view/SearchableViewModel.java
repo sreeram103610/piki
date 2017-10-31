@@ -6,5 +6,7 @@ package org.maadlabs.piki.ui.view;
 
 public interface SearchableViewModel extends TrendingDataViewModel {
 
+    String TAG = "SearchableViewModel";
+
     void setQuery(String query);
 }

@@ -3,9 +3,12 @@ package org.maadlabs.piki.ui.navigator;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 
 import org.maadlabs.piki.ui.view.TrendingDataViewModel;
 import org.maadlabs.piki.ui.view.SearchableViewModel;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -19,26 +22,33 @@ public class Navigator {
     SearchableViewModel mSearchableViewModel;
 
     @Inject
-    TrendingDataViewModel mImageDataViewModel;
+    TrendingDataViewModel mTrendingDataViewModel;
 
     @Inject
     public Navigator() {
 
     }
 
-    private void addNewFragment(FragmentActivity activity, Fragment fragment, String tag) {
-        activity.getSupportFragmentManager().beginTransaction()
-                .add(fragment, tag).addToBackStack(null).commit();
+    private void replaceFragment(FragmentActivity activity, Fragment fragment, String tag) {
+        activity.getSupportFragmentManager().beginTransaction().replace(android.R.id.content, fragment, tag)
+                .addToBackStack(null).commit();
     }
 
-    private Fragment getCurrentFragment(FragmentActivity activity){
+    private void addNewFragment(FragmentActivity activity, Fragment fragment, String tag) {
+        activity.getSupportFragmentManager().beginTransaction()
+                .add(android.R.id.content, fragment, tag).commit();
+    }
 
-        FragmentManager fragmentManager = activity.getSupportFragmentManager();
-        if (fragmentManager.getBackStackEntryCount() == 0)
-            return null;
-        String fragmentTag = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName();
-        Fragment currentFragment = fragmentManager.findFragmentByTag(fragmentTag);
-        return currentFragment;
+    private Fragment getFragment(FragmentActivity activity, String tag) {
+        FragmentManager manager = activity.getSupportFragmentManager();
+        return manager.findFragmentByTag(tag);
+    }
+
+    private boolean isVisible(FragmentActivity activity, String tag){
+
+        Fragment fragment = getFragment(activity, tag);
+        return fragment != null && fragment.isVisible();
+
     }
 
     private void navigateToSearchView(FragmentActivity activity) {
@@ -47,20 +57,29 @@ public class Navigator {
             return;
 
 
-        if (!mSearchableViewModel.equals(getCurrentFragment(activity))) {
-            String tag = ((Fragment) mSearchableViewModel).getTag();
-            addNewFragment(activity, (Fragment) mSearchableViewModel, tag);
+        String tag = SearchableViewModel.TAG;
+
+        if (!isVisible(activity, tag)) {
+            Log.i("fragmentNew", "SearchView");
+            replaceFragment(activity, (Fragment) mSearchableViewModel, tag);
         }
     }
 
     public void navigateToTrendingView(FragmentActivity activity) {
 
-        if (!(mImageDataViewModel instanceof Fragment))
+
+        if (!(mTrendingDataViewModel instanceof Fragment))
             return;
 
-        if (!mImageDataViewModel.equals(getCurrentFragment(activity))) {
-            String tag = ((Fragment) mImageDataViewModel).getTag();
-            addNewFragment(activity, (Fragment) mImageDataViewModel, tag);
+        String tag = TrendingDataViewModel.TAG;
+
+        if (!isVisible(activity, tag)) {
+            if (getFragment(activity, tag) == null) { // Fragment not added in activity. New instance required.
+                Log.i("fragmentNew", "TrendingView");
+                addNewFragment(activity, (Fragment) mTrendingDataViewModel, tag);
+            } else {
+                activity.getSupportFragmentManager().popBackStackImmediate(); // Pop once since we are showing searchView for now
+            }
         }
     }
 

@@ -2,6 +2,9 @@ package org.maadlabs.piki.ui.di;
 
 import android.content.Context;
 
+import org.maadlabs.piki.domain.interacter.TrendingImagesUseCase;
+import org.maadlabs.piki.ui.mapper.ImageDataModelMapper;
+import org.maadlabs.piki.ui.presenter.ImageDetailsPresenter;
 import org.maadlabs.piki.ui.view.SearchableViewModel;
 import org.maadlabs.piki.ui.view.TrendingDataViewModel;
 import org.maadlabs.piki.ui.view.fragment.SearchFragment;
@@ -15,11 +18,11 @@ import dagger.Provides;
  */
 
 @Module
-public class ImagesGridModule {
+public class MyModule {
 
     Context context;
 
-    public ImagesGridModule(Context context) {
+    public MyModule(Context context) {
         this.context = context;
     }
 
@@ -29,7 +32,7 @@ public class ImagesGridModule {
     }
 
     @Provides
-    TrendingDataViewModel treding() {
+    TrendingDataViewModel trending() {
         return new TrendingImagesFragment();
     }
 
@@ -37,4 +40,5 @@ public class ImagesGridModule {
     SearchableViewModel searchable() {
         return new SearchFragment();
     }
+
 }

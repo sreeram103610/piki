@@ -37,7 +37,8 @@ public class ImgurSearchRequest {
         }
 
         public Builder query(String query) {
-            mSearchRequest.query = query.trim();
+            if(query != null)
+                mSearchRequest.query = query.trim();
             return this;
         }
 

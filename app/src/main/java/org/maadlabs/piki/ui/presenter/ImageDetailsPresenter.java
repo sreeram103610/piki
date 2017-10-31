@@ -18,7 +18,7 @@ import io.reactivex.observers.DisposableObserver;
  * Created by brainfreak on 10/14/17.
  */
 
-public class ImageDetailsPresenter implements Presenter {
+public class ImageDetailsPresenter implements Presenter<TrendingDataViewModel> {
 
     ImageDataModelMapper mImageDataMapper;
     TrendingImagesUseCase mTrendingImagesUseCase;
@@ -32,6 +32,7 @@ public class ImageDetailsPresenter implements Presenter {
         mTrendingImagesUseCase = trendingImagesUseCase;
     }
 
+    @Override
     public void setView(TrendingDataViewModel model) {
         mImageDataModel = model;
     }
@@ -73,6 +74,7 @@ public class ImageDetailsPresenter implements Presenter {
     private void showImageList(List<ImageData> imageList) {
         mImageDataModel.loadImages(mImageDataMapper.map(imageList));
     }
+
 
     @Override
     public void pause() {

@@ -46,7 +46,7 @@ public class ImagesListAdapter extends RecyclerView.Adapter<ImagesListAdapter.Ho
     public void onBindViewHolder(Holder holder, int position) {
 
         ImageDataModel dataModel = mImageDataModelList.get(position);
-        RequestOptions options = new RequestOptions().fitCenter().diskCacheStrategy(DiskCacheStrategy.DATA);
+        RequestOptions options = new RequestOptions().fitCenter().diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
         Glide.with(mContext).setDefaultRequestOptions(options).load(dataModel.getUri()).into(holder.imageView);
     }
 
