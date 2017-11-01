@@ -17,9 +17,9 @@ import org.maadlabs.piki.data.di.ImageDataRepositoryModule;
 import org.maadlabs.piki.ui.di.DaggerFragmentComponent;
 import org.maadlabs.piki.ui.di.MyModule;
 import org.maadlabs.piki.ui.model.ImageDataModel;
-import org.maadlabs.piki.ui.presenter.ImageDetailsPresenter;
-import org.maadlabs.piki.ui.view.TrendingDataViewModel;
-import org.maadlabs.piki.ui.view.LoadingInterface;
+import org.maadlabs.piki.ui.presenter.TrendingImagesPresenter;
+import org.maadlabs.piki.ui.view.intf.TrendingDataViewModel;
+import org.maadlabs.piki.ui.view.intf.LoadingInterface;
 import org.maadlabs.piki.ui.view.adapter.ImagesListAdapter;
 
 import java.util.List;
@@ -42,7 +42,7 @@ public class TrendingImagesFragment extends Fragment implements TrendingDataView
     @Inject
     Context mContext;
     @Inject
-    ImageDetailsPresenter mPresenter;
+    TrendingImagesPresenter mPresenter;
 
     LoadingInterface mLoadingInterface;
 

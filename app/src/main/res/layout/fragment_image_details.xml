@@ -1,0 +1,49 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@android:color/background_dark"
+             tools:context="org.maadlabs.piki.ui.view.fragment.ImageDetailsFragment">
+
+    <ImageView
+        android:id="@+id/image_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:contentDescription="@null"
+        android:scaleType="centerInside"
+        tools:src="@mipmap/ic_launcher"/>
+
+    <android.support.v7.widget.ButtonBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:layout_gravity="bottom">
+
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/downloadImageButton"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:src="@drawable/ic_file_download_white_24dp"
+            android:contentDescription="@string/download_string"
+            android:background="@android:color/transparent"
+            android:paddingTop="@dimen/download_image_padding_top"
+            android:paddingBottom="@dimen/download_image_padding_bottom"/>
+
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/shareImageButton"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:src="@drawable/ic_share_white_24dp"
+            android:contentDescription="@string/share_string"
+            android:background="@android:color/transparent"
+            android:paddingTop="@dimen/share_image_padding_top"
+            android:paddingBottom="@dimen/share_image_padding_bottom"/>
+
+    </android.support.v7.widget.ButtonBarLayout>
+
+</FrameLayout>

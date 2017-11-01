@@ -5,10 +5,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 
-import org.maadlabs.piki.ui.view.TrendingDataViewModel;
-import org.maadlabs.piki.ui.view.SearchableViewModel;
-
-import java.util.List;
+import org.maadlabs.piki.ui.view.intf.TrendingDataViewModel;
+import org.maadlabs.piki.ui.view.intf.SearchableViewModel;
 
 import javax.inject.Inject;
 

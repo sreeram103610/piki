@@ -2,11 +2,8 @@ package org.maadlabs.piki.ui.di;
 
 import android.content.Context;
 
-import org.maadlabs.piki.domain.interacter.TrendingImagesUseCase;
-import org.maadlabs.piki.ui.mapper.ImageDataModelMapper;
-import org.maadlabs.piki.ui.presenter.ImageDetailsPresenter;
-import org.maadlabs.piki.ui.view.SearchableViewModel;
-import org.maadlabs.piki.ui.view.TrendingDataViewModel;
+import org.maadlabs.piki.ui.view.intf.SearchableViewModel;
+import org.maadlabs.piki.ui.view.intf.TrendingDataViewModel;
 import org.maadlabs.piki.ui.view.fragment.SearchFragment;
 import org.maadlabs.piki.ui.view.fragment.TrendingImagesFragment;
 

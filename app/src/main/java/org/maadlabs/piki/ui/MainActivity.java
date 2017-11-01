@@ -3,12 +3,12 @@ package org.maadlabs.piki.ui;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,16 +17,12 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.maadlabs.piki.R;
-import org.maadlabs.piki.data.di.ApiModule;
-import org.maadlabs.piki.data.di.ImageDataRepositoryModule;
 import org.maadlabs.piki.ui.di.DaggerActivityComponent;
-import org.maadlabs.piki.ui.di.DaggerFragmentComponent;
 import org.maadlabs.piki.ui.di.MyModule;
 import org.maadlabs.piki.ui.navigator.Navigator;
-import org.maadlabs.piki.ui.view.LoadingInterface;
+import org.maadlabs.piki.ui.view.intf.LoadingInterface;
 import org.maadlabs.piki.ui.view.fragment.TrendingImagesFragment;
 
 import javax.inject.Inject;
@@ -57,7 +53,13 @@ public class MainActivity extends AppCompatActivity implements LoadingInterface,
         ButterKnife.bind(this);
         DaggerActivityComponent.builder()
                 .myModule(new MyModule(this)).build().inject(this);
+        initToolbar();
         mNavigator.navigateToTrendingView(this);
+    }
+
+    private void initToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 
     @Override

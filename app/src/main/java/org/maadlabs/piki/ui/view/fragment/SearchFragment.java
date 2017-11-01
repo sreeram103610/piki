@@ -18,8 +18,8 @@ import org.maadlabs.piki.ui.di.DaggerFragmentComponent;
 import org.maadlabs.piki.ui.di.MyModule;
 import org.maadlabs.piki.ui.model.ImageDataModel;
 import org.maadlabs.piki.ui.presenter.SearchImagesPresenter;
-import org.maadlabs.piki.ui.view.LoadingInterface;
-import org.maadlabs.piki.ui.view.SearchableViewModel;
+import org.maadlabs.piki.ui.view.intf.LoadingInterface;
+import org.maadlabs.piki.ui.view.intf.SearchableViewModel;
 import org.maadlabs.piki.ui.view.adapter.ImagesListAdapter;
 
 import java.util.List;

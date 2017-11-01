@@ -1,4 +1,4 @@
-package org.maadlabs.piki.ui.view;
+package org.maadlabs.piki.ui.view.intf;
 
 /**
  * Created by brainfreak on 10/14/17.

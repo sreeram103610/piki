@@ -1,9 +1,10 @@
 package org.maadlabs.piki.ui.presenter;
 
+
 import org.maadlabs.piki.domain.entity.ImageData;
-import org.maadlabs.piki.domain.interacter.SearchImageListUseCase;
+import org.maadlabs.piki.domain.interacter.TrendingImagesUseCase;
 import org.maadlabs.piki.ui.mapper.ImageDataModelMapper;
-import org.maadlabs.piki.ui.view.intf.SearchableViewModel;
+import org.maadlabs.piki.ui.view.intf.TrendingDataViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,64 +15,66 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableObserver;
 
 /**
- * Created by brainfreak on 10/26/17.
+ * Created by brainfreak on 10/14/17.
  */
 
-public class SearchImagesPresenter implements Presenter<SearchableViewModel> {
+public class TrendingImagesPresenter implements Presenter<TrendingDataViewModel> {
 
-    SearchImageListUseCase mSearchImageListUseCase;
-    SearchableViewModel mSearchableViewModel;
-    SearchObserver mImageListObserver;
-    @Inject
-    ImageDataModelMapper mImageDataModelMapper;
+    ImageDataModelMapper mImageDataMapper;
+    TrendingImagesUseCase mTrendingImagesUseCase;
+
+    TrendingDataViewModel mImageDataModel;
+    private ImageListObserver mImageListObserver;
 
     @Inject
-    public SearchImagesPresenter(SearchImageListUseCase useCase) {
-        mSearchImageListUseCase = useCase;
+    public TrendingImagesPresenter(TrendingImagesUseCase trendingImagesUseCase, ImageDataModelMapper mapper) {
+        mImageDataMapper = mapper;
+        mTrendingImagesUseCase = trendingImagesUseCase;
     }
 
     @Override
-    public void setView(SearchableViewModel model) {
-        mSearchableViewModel = model;
+    public void setView(TrendingDataViewModel model) {
+        mImageDataModel = model;
     }
 
     private void showViewLoading() {
-        mSearchableViewModel.showLoading();
+        mImageDataModel.showLoading();
     }
 
     private void hideViewLoading() {
-        mSearchableViewModel.hideLoading();
+        mImageDataModel.hideLoading();
     }
 
     private void showViewRetry() {
-        mSearchableViewModel.showRetry();
+        mImageDataModel.showRetry();
     }
 
     private void hideViewRetry() {
-        mSearchableViewModel.hideRetry();
+        mImageDataModel.hideRetry();
     }
 
     private void showErrorMessage(String error) {
-        mSearchableViewModel.showError(error);
+        mImageDataModel.showError(error);
     }
 
-    private void hideErrorMessage() { mSearchableViewModel.hideErrorMessage(); }
+    private void hideErrorMessage() { mImageDataModel.hideErrorMessage(); }
 
     public void init() {
 
         showViewLoading();
         hideViewRetry();
+        mImageListObserver = new ImageListObserver();
+        mTrendingImagesUseCase.execute(mImageListObserver);
     }
 
     private void getImageList(String query) {
-        mImageListObserver = new SearchObserver();
-        mSearchImageListUseCase.setQuery(query);
-        mSearchImageListUseCase.execute(mImageListObserver);
+        mImageListObserver = new ImageListObserver();
     }
 
     private void showImageList(List<ImageData> imageList) {
-        mSearchableViewModel.loadImages(mImageDataModelMapper.map(imageList));
+        mImageDataModel.loadImages(mImageDataMapper.map(imageList));
     }
+
 
     @Override
     public void pause() {
@@ -85,21 +88,14 @@ public class SearchImagesPresenter implements Presenter<SearchableViewModel> {
 
     @Override
     public void destory() {
-        mSearchImageListUseCase.removeObserver();
+        mTrendingImagesUseCase.removeObserver();
     }
 
     private void hideImages() {
-        mSearchableViewModel.hideImages();
+        mImageDataModel.hideImages();
     }
 
-    public void onSearchQuery(String query) {
-        hideViewRetry();
-        showViewLoading();
-        hideImages();
-        getImageList(query);
-    }
-
-    private final class SearchObserver extends DisposableObserver<List<ImageData>> {
+    private final class ImageListObserver extends DisposableObserver<List<ImageData>> {
 
         private List<ImageData> mImageDataList = new ArrayList<>();
 

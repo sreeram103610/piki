@@ -1,4 +1,4 @@
-package org.maadlabs.piki.ui.view;
+package org.maadlabs.piki.ui.view.intf;
 
 import org.maadlabs.piki.domain.entity.ImageData;
 import org.maadlabs.piki.ui.model.ImageDataModel;
