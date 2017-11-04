@@ -17,6 +17,7 @@ import org.maadlabs.piki.data.di.ImageDataRepositoryModule;
 import org.maadlabs.piki.ui.di.DaggerFragmentComponent;
 import org.maadlabs.piki.ui.di.MyModule;
 import org.maadlabs.piki.ui.model.ImageDataModel;
+import org.maadlabs.piki.ui.navigator.Navigator;
 import org.maadlabs.piki.ui.presenter.SearchImagesPresenter;
 import org.maadlabs.piki.ui.view.intf.LoadingInterface;
 import org.maadlabs.piki.ui.view.intf.SearchableViewModel;
@@ -30,7 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class SearchFragment extends Fragment implements SearchableViewModel{
+public class SearchFragment extends Fragment implements SearchableViewModel, ImagesListAdapter.OnItemClickListener{
 
 
     @BindView(R.id.images_recyclerview)
@@ -38,10 +39,15 @@ public class SearchFragment extends Fragment implements SearchableViewModel{
 
     @Inject
     ImagesListAdapter mImagesListAdapter;
+
     @Inject
     Context mContext;
+
     @Inject
     SearchImagesPresenter mPresenter;
+
+    @Inject
+    Navigator mNavigator;
 
     LoadingInterface mLoadingInterface;
     private String mSearchQuery;
@@ -102,8 +108,9 @@ public class SearchFragment extends Fragment implements SearchableViewModel{
     }
 
     @Override
-    public void onImageClicked(int imageId) {
+    public void onImageClicked(ImageDataModel model) {
 
+        mNavigator.navigateToViewImage(getActivity(), model);
     }
 
     @Override
@@ -173,4 +180,8 @@ public class SearchFragment extends Fragment implements SearchableViewModel{
     }
 
 
+    @Override
+    public void onItemClick(int position, ImageDataModel model) {
+        onImageClicked(model);
+    }
 }

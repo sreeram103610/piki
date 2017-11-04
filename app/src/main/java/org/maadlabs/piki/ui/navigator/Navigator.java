@@ -3,10 +3,13 @@ package org.maadlabs.piki.ui.navigator;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
+import org.maadlabs.piki.ui.model.ImageDataModel;
 import org.maadlabs.piki.ui.view.intf.TrendingDataViewModel;
 import org.maadlabs.piki.ui.view.intf.SearchableViewModel;
+import org.maadlabs.piki.ui.view.intf.ViewImageInfoModel;
 
 import javax.inject.Inject;
 
@@ -21,6 +24,9 @@ public class Navigator {
 
     @Inject
     TrendingDataViewModel mTrendingDataViewModel;
+
+    @Inject
+    ViewImageInfoModel<ImageDataModel> mViewImageInfoModel;
 
     @Inject
     public Navigator() {
@@ -58,7 +64,6 @@ public class Navigator {
         String tag = SearchableViewModel.TAG;
 
         if (!isVisible(activity, tag)) {
-            Log.i("fragmentNew", "SearchView");
             replaceFragment(activity, (Fragment) mSearchableViewModel, tag);
         }
     }
@@ -73,7 +78,6 @@ public class Navigator {
 
         if (!isVisible(activity, tag)) {
             if (getFragment(activity, tag) == null) { // Fragment not added in activity. New instance required.
-                Log.i("fragmentNew", "TrendingView");
                 addNewFragment(activity, (Fragment) mTrendingDataViewModel, tag);
             } else {
                 activity.getSupportFragmentManager().popBackStackImmediate(); // Pop once since we are showing searchView for now
@@ -85,4 +89,18 @@ public class Navigator {
         mSearchableViewModel.setQuery(query);
         navigateToSearchView(activity);
     }
+
+    public void navigateToViewImage(FragmentActivity activity, ImageDataModel model) {
+
+        if(!(mViewImageInfoModel instanceof Fragment))
+            return;
+
+        String tag = ViewImageInfoModel.TAG;
+
+        mViewImageInfoModel.setImage(model);
+        activity.getSupportFragmentManager().beginTransaction().addToBackStack(null)
+                .replace(android.R.id.content, (Fragment) mViewImageInfoModel, tag)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .commit();
+     }
 }

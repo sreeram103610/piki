@@ -26,13 +26,22 @@ import javax.inject.Inject;
 
 public class ImagesListAdapter extends RecyclerView.Adapter<ImagesListAdapter.Holder> {
 
-    List<ImageDataModel> mImageDataModelList;
+    List<ImageDataModel> mModelList;
     @Inject
     Context mContext;
+    private OnItemClickListener mOnItemClickListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(int position, ImageDataModel model);
+    }
 
     @Inject
     public ImagesListAdapter() {
-        mImageDataModelList = Collections.emptyList();
+        mModelList = Collections.emptyList();
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mOnItemClickListener = listener;
     }
 
     @Override
@@ -45,29 +54,49 @@ public class ImagesListAdapter extends RecyclerView.Adapter<ImagesListAdapter.Ho
     @Override
     public void onBindViewHolder(Holder holder, int position) {
 
-        ImageDataModel dataModel = mImageDataModelList.get(position);
+        final ImageDataModel dataModel = mModelList.get(position);
+        final int itemPosition = position;
+
+        holder.getView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mOnItemClickListener != null) {
+                    mOnItemClickListener.onItemClick(itemPosition, dataModel);
+                }
+            }
+        });
+
         RequestOptions options = new RequestOptions().fitCenter().diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
         Glide.with(mContext).setDefaultRequestOptions(options).load(dataModel.getUri()).into(holder.imageView);
     }
 
     @Override
     public int getItemCount() {
-        return mImageDataModelList.size();
+        return mModelList.size();
     }
 
     public class Holder extends RecyclerView.ViewHolder{
 
+        private final View view;
         ImageView imageView;
 
         public Holder(View itemView) {
             super(itemView);
+            view = itemView;
             imageView = (ImageView) itemView.findViewById(R.id.image_view);
+
+        }
+
+
+        public View getView() {
+            return view;
         }
     }
 
     public void setCollection(Collection<ImageDataModel> imagesList) {
-        mImageDataModelList.clear();
-        mImageDataModelList = (List<ImageDataModel>) imagesList;
+        mModelList.clear();
+        mModelList = (List<ImageDataModel>) imagesList;
         notifyDataSetChanged();
     }
+
 }

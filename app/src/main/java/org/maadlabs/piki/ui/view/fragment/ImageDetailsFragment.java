@@ -38,11 +38,19 @@ public class ImageDetailsFragment extends Fragment implements ViewImageInfoModel
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        initToolbar();
+        return inflater.inflate(R.layout.fragment_image_details, container, false);
+    }
+
+    private void initToolbar() {
+
         FragmentActivity activity = getActivity();
         if (activity != null) {
             ActionBar actionBar = activity.getActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+            }
         }
-        return inflater.inflate(R.layout.fragment_image_details, container, false);
     }
 
 
@@ -78,6 +86,11 @@ public class ImageDetailsFragment extends Fragment implements ViewImageInfoModel
 
     @Override
     public void onClick(ButtonType buttonType) {
+
+    }
+
+    @Override
+    public void setImage(Object imageModel) {
 
     }
 }

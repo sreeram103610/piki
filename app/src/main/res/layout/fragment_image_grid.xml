@@ -5,6 +5,7 @@
               android:layout_height="match_parent"
               android:orientation="vertical"
               android:id="@+id/fragment_imagegrid"
+              android:layout_marginTop="?attr/actionBarSize"
               tools:context="org.maadlabs.piki.ui.view.fragment.TrendingImagesFragment">
 
     <android.support.v7.widget.RecyclerView

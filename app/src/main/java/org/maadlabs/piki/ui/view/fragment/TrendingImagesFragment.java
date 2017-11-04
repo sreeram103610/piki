@@ -17,6 +17,7 @@ import org.maadlabs.piki.data.di.ImageDataRepositoryModule;
 import org.maadlabs.piki.ui.di.DaggerFragmentComponent;
 import org.maadlabs.piki.ui.di.MyModule;
 import org.maadlabs.piki.ui.model.ImageDataModel;
+import org.maadlabs.piki.ui.navigator.Navigator;
 import org.maadlabs.piki.ui.presenter.TrendingImagesPresenter;
 import org.maadlabs.piki.ui.view.intf.TrendingDataViewModel;
 import org.maadlabs.piki.ui.view.intf.LoadingInterface;
@@ -32,7 +33,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TrendingImagesFragment extends Fragment implements TrendingDataViewModel {
+public class TrendingImagesFragment extends Fragment implements TrendingDataViewModel, ImagesListAdapter.OnItemClickListener {
 
     public static final String TAG = "TrendingImagesFragment";
     @BindView(R.id.images_recyclerview) RecyclerView mImagesRecyclerView;
@@ -43,6 +44,9 @@ public class TrendingImagesFragment extends Fragment implements TrendingDataView
     Context mContext;
     @Inject
     TrendingImagesPresenter mPresenter;
+
+    @Inject
+    Navigator mNavigator;
 
     LoadingInterface mLoadingInterface;
 
@@ -79,8 +83,9 @@ public class TrendingImagesFragment extends Fragment implements TrendingDataView
     }
 
     @Override
-    public void onImageClicked(int imageId) {
+    public void onImageClicked(ImageDataModel model) {
 
+        mNavigator.navigateToViewImage(getActivity(), model);
     }
 
     @Override
@@ -149,5 +154,8 @@ public class TrendingImagesFragment extends Fragment implements TrendingDataView
     }
 
 
-
+    @Override
+    public void onItemClick(int position, ImageDataModel model) {
+        onImageClicked(model);
+    }
 }

@@ -13,7 +13,7 @@ public interface TrendingDataViewModel {
 
     String TAG = "TrendingDataViewModel";
 
-    void onImageClicked(int imageId);
+    void onImageClicked(ImageDataModel model);
     void loadImages(List<ImageDataModel> imageList);
     void showLoading();
     void hideLoading();
