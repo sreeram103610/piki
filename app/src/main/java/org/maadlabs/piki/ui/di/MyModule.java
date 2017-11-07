@@ -2,10 +2,13 @@ package org.maadlabs.piki.ui.di;
 
 import android.content.Context;
 
+import org.maadlabs.piki.ui.model.ImageDataModel;
+import org.maadlabs.piki.ui.view.fragment.ImageDetailsFragment;
 import org.maadlabs.piki.ui.view.intf.SearchableViewModel;
 import org.maadlabs.piki.ui.view.intf.TrendingDataViewModel;
 import org.maadlabs.piki.ui.view.fragment.SearchFragment;
 import org.maadlabs.piki.ui.view.fragment.TrendingImagesFragment;
+import org.maadlabs.piki.ui.view.intf.ViewImageInfoModel;
 
 import dagger.Module;
 import dagger.Provides;
@@ -38,4 +41,6 @@ public class MyModule {
         return new SearchFragment();
     }
 
+    @Provides
+    ViewImageInfoModel<ImageDataModel> imageInfo() { return new ImageDetailsFragment(); }
 }

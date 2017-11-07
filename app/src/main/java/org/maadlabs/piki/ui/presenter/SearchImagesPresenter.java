@@ -33,6 +33,7 @@ public class SearchImagesPresenter implements Presenter<SearchableViewModel> {
     @Override
     public void setView(SearchableViewModel model) {
         mSearchableViewModel = model;
+        init();
     }
 
     private void showViewLoading() {

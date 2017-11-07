@@ -102,7 +102,6 @@ public class SearchFragment extends Fragment implements SearchableViewModel, Ima
                 .myModule(new MyModule(getContext())).build().inject(this);
         initViews();
         mPresenter.setView(this);
-        mPresenter.init();
         if (mSearchQuery != null)
             mPresenter.onSearchQuery(mSearchQuery);
     }

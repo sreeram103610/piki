@@ -14,4 +14,5 @@ public interface ViewImageInfoModel<T> extends LoadingInterface {
 
     void onClick(ButtonType buttonType);
     void setImage(T imageModel);
+    void showImage();
 }
