@@ -1,6 +1,7 @@
 package org.maadlabs.piki.ui.presenter;
 
-import org.maadlabs.piki.ui.view.intf.ViewImageInfoModel;
+import org.maadlabs.piki.ui.model.ImageDataModel;
+import org.maadlabs.piki.ui.view.intf.ImageInfoViewModel;
 
 import javax.inject.Inject;
 
@@ -8,19 +9,23 @@ import javax.inject.Inject;
  * Created by brainfreak on 10/31/17.
  */
 
-public class ImageDetailsPresenter implements Presenter<ViewImageInfoModel> {
+public class ImageDetailsPresenter implements Presenter<ImageInfoViewModel> {
 
     @Inject
-    ViewImageInfoModel mViewImageInfoModel;
+    ImageInfoViewModel mImageInfoViewModel;
+
+    @Inject
+    public ImageDetailsPresenter() {
+    }
 
     @Override
-    public void setView(ViewImageInfoModel view) {
-        mViewImageInfoModel = view;
+    public void setView(ImageInfoViewModel view) {
+        mImageInfoViewModel = view;
         loadView();
     }
 
     private void loadView() {
-        mViewImageInfoModel.showImage();
+        mImageInfoViewModel.showImage();
     }
 
     @Override

@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class SearchFragment extends Fragment implements SearchableViewModel, ImagesListAdapter.OnItemClickListener{
+public class SearchFragment extends Fragment implements SearchableViewModel, ImagesListAdapter.ItemInfoListener {
 
 
     @BindView(R.id.images_recyclerview)
@@ -74,7 +73,6 @@ public class SearchFragment extends Fragment implements SearchableViewModel, Ima
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_image_grid, container, false);
-        ButterKnife.setDebug(true);
         ButterKnife.bind(this, view);
         mLoadingInterface = (LoadingInterface) getActivity();
         return view;
@@ -90,6 +88,7 @@ public class SearchFragment extends Fragment implements SearchableViewModel, Ima
 
 
     private void initViews() {
+        mImagesListAdapter.setItemInfoListener(this);
         mImagesRecyclerView.setLayoutManager(new GridLayoutManager(mContext, 2));
         mImagesRecyclerView.setAdapter(mImagesListAdapter);
     }
@@ -114,7 +113,6 @@ public class SearchFragment extends Fragment implements SearchableViewModel, Ima
 
     @Override
     public void loadImages(List<ImageDataModel> imageList) {
-        Log.i("onLoad", "Images");
         mImagesRecyclerView.setVisibility(View.VISIBLE);
         mImagesListAdapter.setCollection(imageList);
     }
@@ -182,5 +180,10 @@ public class SearchFragment extends Fragment implements SearchableViewModel, Ima
     @Override
     public void onItemClick(int position, ImageDataModel model) {
         onImageClicked(model);
+    }
+
+    @Override
+    public void onMaxItemsLimitReached(int position) {
+
     }
 }

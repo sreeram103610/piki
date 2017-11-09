@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +34,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TrendingImagesFragment extends Fragment implements TrendingDataViewModel, ImagesListAdapter.OnItemClickListener {
+public class TrendingImagesFragment extends Fragment implements TrendingDataViewModel, ImagesListAdapter.ItemInfoListener {
 
     public static final String TAG = "TrendingImagesFragment";
     @BindView(R.id.images_recyclerview) RecyclerView mImagesRecyclerView;
@@ -68,6 +69,7 @@ public class TrendingImagesFragment extends Fragment implements TrendingDataView
     }
 
     private void initViews() {
+        mImagesListAdapter.setItemInfoListener(this);
         mImagesRecyclerView.setLayoutManager(new GridLayoutManager(mContext, 2));
         mImagesRecyclerView.setAdapter(mImagesListAdapter);
     }
@@ -134,6 +136,11 @@ public class TrendingImagesFragment extends Fragment implements TrendingDataView
         mImagesRecyclerView.setVisibility(View.GONE);
     }
 
+    @Override
+    public void setNewItemsCount(int limit) {
+        mImagesListAdapter.setNewItemsLimit(limit);
+    }
+
 
     @Override
     public void onPause() {
@@ -157,5 +164,11 @@ public class TrendingImagesFragment extends Fragment implements TrendingDataView
     @Override
     public void onItemClick(int position, ImageDataModel model) {
         onImageClicked(model);
+    }
+
+    @Override
+    public void onMaxItemsLimitReached(int position) {
+        Log.i("position", position + "");
+        mPresenter.onMaxItemsReached(position);
     }
 }

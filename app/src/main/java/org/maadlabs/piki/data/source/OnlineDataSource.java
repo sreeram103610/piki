@@ -37,11 +37,11 @@ public class OnlineDataSource implements ImageDataSource {
     }
 
     @Override
-    public Observable<List<ImageData>> trending(int limit) {
+    public Observable<List<ImageData>> trending(int limit, int offset) {
 
         List<Observable<List<ImageData>>> observableList = new ArrayList<>();
         for (RestApi api : mRestApiList) {
-            Observable<List<ImageData>> images = api.trendingImagesList(limit);
+            Observable<List<ImageData>> images = api.trendingImagesList(limit, offset);
             if (images != null)
                 observableList.add(images);
         }

@@ -4,7 +4,7 @@
              android:layout_height="match_parent"
              android:background="@android:color/background_dark"
              android:layout_marginTop="?attr/actionBarSize"
-             tools:context="org.maadlabs.piki.ui.view.fragment.ImageDetailsFragment">
+             tools:context="org.maadlabs.piki.ui.view.fragment.ImageDetailsFragmentView">
 
     <ImageView
         android:id="@+id/image_view"

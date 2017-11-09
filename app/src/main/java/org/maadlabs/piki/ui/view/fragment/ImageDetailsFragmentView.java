@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,18 +16,22 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 import org.maadlabs.piki.R;
+import org.maadlabs.piki.ui.di.DaggerFragmentComponent;
+import org.maadlabs.piki.ui.di.MyModule;
 import org.maadlabs.piki.ui.model.ImageDataModel;
 import org.maadlabs.piki.ui.presenter.ImageDetailsPresenter;
-import org.maadlabs.piki.ui.view.intf.LoadingInterface;
-import org.maadlabs.piki.ui.view.intf.ViewImageInfoModel;
+import org.maadlabs.piki.ui.view.intf.ImageInfoViewModel;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ImageDetailsFragment extends Fragment implements ViewImageInfoModel<ImageDataModel>{
+public class ImageDetailsFragmentView extends Fragment implements ImageInfoViewModel {
 
     Toolbar mToolbar;
 
@@ -37,13 +40,12 @@ public class ImageDetailsFragment extends Fragment implements ViewImageInfoModel
     @Inject
     ImageDetailsPresenter mImageDetailsPresenter;
 
-    @Inject
-    @Named("MainActivityContext")
-    Context mContext;
     private View mView;
-    private ImageView mImageView;
 
-    public ImageDetailsFragment() {
+    @BindView(R.id.image_view)
+    ImageView mImageView;
+
+    public ImageDetailsFragmentView() {
         // Required empty public constructor
     }
 
@@ -51,8 +53,9 @@ public class ImageDetailsFragment extends Fragment implements ViewImageInfoModel
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         mView = inflater.inflate(R.layout.fragment_image_details, container, false);
-        mImageView = (ImageView) mView.findViewById(R.id.image_view);
+        ButterKnife.bind(this, mView);
         initToolbar();
         return mView;
     }
@@ -60,6 +63,7 @@ public class ImageDetailsFragment extends Fragment implements ViewImageInfoModel
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        DaggerFragmentComponent.builder().myModule(new MyModule(getContext())).build().inject(this);
         mImageDetailsPresenter.setView(this);
     }
 
@@ -70,6 +74,7 @@ public class ImageDetailsFragment extends Fragment implements ViewImageInfoModel
             ActionBar actionBar = activity.getActionBar();
             if (actionBar != null) {
                 actionBar.setDisplayHomeAsUpEnabled(true);
+                actionBar.setHomeButtonEnabled(true);
             }
         }
     }

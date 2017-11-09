@@ -20,10 +20,11 @@ public interface TrendingDataViewModel {
     void showRetry();
     void hideRetry();
     void showError(String errorMessage);
-
     void init();
 
     void hideErrorMessage();
 
     void hideImages();
+
+    void setNewItemsCount(int limit);
 }

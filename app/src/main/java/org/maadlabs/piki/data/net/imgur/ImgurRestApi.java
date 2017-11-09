@@ -59,7 +59,7 @@ public class ImgurRestApi implements RestApi{
     }
 
     @Override
-    public Observable<List<ImageData>> trendingImagesList(int limit) {
+    public Observable<List<ImageData>> trendingImagesList(int limit, int offset) {
         return null;
     }
 }

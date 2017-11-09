@@ -25,6 +25,7 @@ public class TrendingImagesPresenter implements Presenter<TrendingDataViewModel>
 
     TrendingDataViewModel mImageDataModel;
     private ImageListObserver mImageListObserver;
+    private boolean mImagesLoaded;
 
     @Inject
     public TrendingImagesPresenter(TrendingImagesUseCase trendingImagesUseCase, ImageDataModelMapper mapper) {
@@ -39,6 +40,13 @@ public class TrendingImagesPresenter implements Presenter<TrendingDataViewModel>
 
     private void showViewLoading() {
         mImageDataModel.showLoading();
+    }
+
+    public void onMaxItemsReached(int position) {
+
+        mImageListObserver = new ImageListObserver();
+        mTrendingImagesUseCase.setOffset(position + 2);
+        mTrendingImagesUseCase.execute(mImageListObserver);
     }
 
     private void hideViewLoading() {
@@ -65,6 +73,7 @@ public class TrendingImagesPresenter implements Presenter<TrendingDataViewModel>
         hideViewRetry();
         mImageListObserver = new ImageListObserver();
         mTrendingImagesUseCase.execute(mImageListObserver);
+        mImageDataModel.setNewItemsCount(mTrendingImagesUseCase.getLimit());
     }
 
     private void getImageList(String query) {

@@ -4,12 +4,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 
 import org.maadlabs.piki.ui.model.ImageDataModel;
 import org.maadlabs.piki.ui.view.intf.TrendingDataViewModel;
 import org.maadlabs.piki.ui.view.intf.SearchableViewModel;
-import org.maadlabs.piki.ui.view.intf.ViewImageInfoModel;
+import org.maadlabs.piki.ui.view.intf.ImageInfoViewModel;
 
 import javax.inject.Inject;
 
@@ -26,7 +25,7 @@ public class Navigator {
     TrendingDataViewModel mTrendingDataViewModel;
 
     @Inject
-    ViewImageInfoModel<ImageDataModel> mViewImageInfoModel;
+    ImageInfoViewModel mImageInfoViewModel;
 
     @Inject
     public Navigator() {
@@ -92,14 +91,14 @@ public class Navigator {
 
     public void navigateToViewImage(FragmentActivity activity, ImageDataModel model) {
 
-        if(!(mViewImageInfoModel instanceof Fragment))
+        if(!(mImageInfoViewModel instanceof Fragment))
             return;
 
-        String tag = ViewImageInfoModel.TAG;
+        String tag = ImageInfoViewModel.TAG;
 
-        mViewImageInfoModel.setImage(model);
+        mImageInfoViewModel.setImage(model);
         activity.getSupportFragmentManager().beginTransaction().addToBackStack(null)
-                .replace(android.R.id.content, (Fragment) mViewImageInfoModel, tag)
+                .replace(android.R.id.content, (Fragment) mImageInfoViewModel, tag)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .commit();
      }

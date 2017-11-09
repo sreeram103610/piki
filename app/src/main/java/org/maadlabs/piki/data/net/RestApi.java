@@ -15,5 +15,5 @@ public interface RestApi {
 
     Observable<List<ImageData>> searchImagesList(String query, int limit);
 
-    Observable<List<ImageData>> trendingImagesList(int limit);
+    Observable<List<ImageData>> trendingImagesList(int limit, int offset);
 }

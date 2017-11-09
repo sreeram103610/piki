@@ -14,5 +14,5 @@ public interface ImageRepository {
 
     Observable<List<ImageData>> search(String query, int limit);
 
-    Observable<List<ImageData>> trending(int limit);
+    Observable<List<ImageData>> trending(int limit, int offset);
 }

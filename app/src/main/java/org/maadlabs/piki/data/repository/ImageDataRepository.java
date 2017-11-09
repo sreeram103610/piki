@@ -31,7 +31,7 @@ public class ImageDataRepository implements ImageRepository {
     }
 
     @Override
-    public Observable<List<ImageData>> trending(int limit) {
-        return mImageDataSource.trending(limit);
+    public Observable<List<ImageData>> trending(int limit, int offset) {
+        return mImageDataSource.trending(limit, offset);
     }
 }

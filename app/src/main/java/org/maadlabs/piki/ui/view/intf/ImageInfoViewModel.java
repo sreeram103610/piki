@@ -1,10 +1,12 @@
 package org.maadlabs.piki.ui.view.intf;
 
+import org.maadlabs.piki.ui.model.ImageDataModel;
+
 /**
  * Created by brainfreak on 10/31/17.
  */
 
-public interface ViewImageInfoModel<T> extends LoadingInterface {
+public interface ImageInfoViewModel extends LoadingInterface {
 
     String TAG = "ViewImageInfoModel";
 
@@ -13,6 +15,6 @@ public interface ViewImageInfoModel<T> extends LoadingInterface {
     }
 
     void onClick(ButtonType buttonType);
-    void setImage(T imageModel);
+    void setImage(ImageDataModel imageModel);
     void showImage();
 }

@@ -14,6 +14,7 @@ import com.bumptech.glide.request.RequestOptions;
 import org.maadlabs.piki.R;
 import org.maadlabs.piki.ui.model.ImageDataModel;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -29,19 +30,24 @@ public class ImagesListAdapter extends RecyclerView.Adapter<ImagesListAdapter.Ho
     List<ImageDataModel> mModelList;
     @Inject
     Context mContext;
-    private OnItemClickListener mOnItemClickListener;
+    private ItemInfoListener mItemInfoListener;
+    int mMaxItemPosition;
+    int mItemLimit;
 
-    public interface OnItemClickListener {
+    private int mNewItemsLimit;
+
+    public interface ItemInfoListener {
         void onItemClick(int position, ImageDataModel model);
+        void onMaxItemsLimitReached(int position);
     }
 
     @Inject
     public ImagesListAdapter() {
-        mModelList = Collections.emptyList();
+        mModelList = new ArrayList<>();
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        mOnItemClickListener = listener;
+    public void setItemInfoListener(ItemInfoListener listener) {
+        mItemInfoListener = listener;
     }
 
     @Override
@@ -51,17 +57,29 @@ public class ImagesListAdapter extends RecyclerView.Adapter<ImagesListAdapter.Ho
         return new Holder(view);
     }
 
+    public void setNewItemsLimit(int limit) {
+        mNewItemsLimit = limit;
+    }
+
     @Override
     public void onBindViewHolder(Holder holder, int position) {
 
         final ImageDataModel dataModel = mModelList.get(position);
         final int itemPosition = position;
+        mMaxItemPosition = Math.max(mMaxItemPosition, position);
+
+        if (mMaxItemPosition + 1 >= mItemLimit) {
+            mItemLimit = mItemLimit + mNewItemsLimit;
+            if (mMaxItemPosition >= (mNewItemsLimit - 1)) // Initially mNewwItemsLimit items will be loaded. This condition
+                                                            // will prevent to load images a second time.
+                mItemInfoListener.onMaxItemsLimitReached(mMaxItemPosition);
+        }
 
         holder.getView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mOnItemClickListener != null) {
-                    mOnItemClickListener.onItemClick(itemPosition, dataModel);
+                if(mItemInfoListener != null) {
+                    mItemInfoListener.onItemClick(itemPosition, dataModel);
                 }
             }
         });
@@ -94,8 +112,7 @@ public class ImagesListAdapter extends RecyclerView.Adapter<ImagesListAdapter.Ho
     }
 
     public void setCollection(Collection<ImageDataModel> imagesList) {
-        mModelList.clear();
-        mModelList = (List<ImageDataModel>) imagesList;
+        mModelList.addAll(imagesList);
         notifyDataSetChanged();
     }
 
