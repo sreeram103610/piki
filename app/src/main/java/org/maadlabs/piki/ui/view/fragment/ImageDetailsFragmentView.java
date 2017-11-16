@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,6 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 import org.maadlabs.piki.R;
-import org.maadlabs.piki.ui.di.DaggerFragmentComponent;
 import org.maadlabs.piki.ui.di.MyModule;
 import org.maadlabs.piki.ui.model.ImageDataModel;
 import org.maadlabs.piki.ui.presenter.ImageDetailsPresenter;
@@ -40,11 +40,15 @@ public class ImageDetailsFragmentView extends Fragment implements ImageInfoViewM
     @Inject
     ImageDetailsPresenter mImageDetailsPresenter;
 
+    @Inject
+    Context mContext;
+
     private View mView;
 
     @BindView(R.id.image_view)
     ImageView mImageView;
 
+    @Inject
     public ImageDetailsFragmentView() {
         // Required empty public constructor
     }
@@ -53,6 +57,8 @@ public class ImageDetailsFragmentView extends Fragment implements ImageInfoViewM
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        Log.i("IDFragContext", mContext.hashCode() + "");
 
         mView = inflater.inflate(R.layout.fragment_image_details, container, false);
         ButterKnife.bind(this, mView);
@@ -63,7 +69,6 @@ public class ImageDetailsFragmentView extends Fragment implements ImageInfoViewM
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        DaggerFragmentComponent.builder().myModule(new MyModule(getContext())).build().inject(this);
         mImageDetailsPresenter.setView(this);
     }
 
@@ -82,7 +87,7 @@ public class ImageDetailsFragmentView extends Fragment implements ImageInfoViewM
     @Override
     public void showImage() {
         if (mImageData != null && mImageData.getUri() != null)
-            Glide.with(getContext()).load(mImageData.getUri()).into(mImageView);
+            Glide.with(mContext).load(mImageData.getUri()).into(mImageView);
     }
 
     @Override
@@ -118,6 +123,13 @@ public class ImageDetailsFragmentView extends Fragment implements ImageInfoViewM
     @Override
     public void onClick(ButtonType buttonType) {
 
+        switch(buttonType) {
+            case SHARE:
+                break;
+            case DOWNLOAD:
+
+                break;
+        }
     }
 
     @Override

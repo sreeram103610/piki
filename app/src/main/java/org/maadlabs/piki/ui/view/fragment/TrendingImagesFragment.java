@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import org.maadlabs.piki.R;
 import org.maadlabs.piki.data.di.ApiModule;
 import org.maadlabs.piki.data.di.ImageDataRepositoryModule;
-import org.maadlabs.piki.ui.di.DaggerFragmentComponent;
 import org.maadlabs.piki.ui.di.MyModule;
 import org.maadlabs.piki.ui.model.ImageDataModel;
 import org.maadlabs.piki.ui.navigator.Navigator;
@@ -37,6 +36,7 @@ import butterknife.ButterKnife;
 public class TrendingImagesFragment extends Fragment implements TrendingDataViewModel, ImagesListAdapter.ItemInfoListener {
 
     public static final String TAG = "TrendingImagesFragment";
+
     @BindView(R.id.images_recyclerview) RecyclerView mImagesRecyclerView;
 
     @Inject
@@ -46,25 +46,27 @@ public class TrendingImagesFragment extends Fragment implements TrendingDataView
     @Inject
     TrendingImagesPresenter mPresenter;
 
-    @Inject
     Navigator mNavigator;
 
     LoadingInterface mLoadingInterface;
 
+    @Inject
     public TrendingImagesFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
+        Log.i("TIFragContext", mContext.hashCode() + "");
+
         View view = inflater.inflate(R.layout.fragment_image_grid, container, false);
         ButterKnife.setDebug(true);
         ButterKnife.bind(this, view);
         mLoadingInterface = (LoadingInterface) getActivity();
+        mNavigator = Navigator.getInstance();
         return view;
     }
 
@@ -77,8 +79,6 @@ public class TrendingImagesFragment extends Fragment implements TrendingDataView
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        DaggerFragmentComponent.builder().apiModule(new ApiModule()).imageDataRepositoryModule(new ImageDataRepositoryModule())
-                .myModule(new MyModule(getContext())).build().inject(this);
         initViews();
         mPresenter.setView(this);
         mPresenter.init();

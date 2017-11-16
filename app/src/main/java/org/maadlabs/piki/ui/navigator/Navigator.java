@@ -27,9 +27,17 @@ public class Navigator {
     @Inject
     ImageInfoViewModel mImageInfoViewModel;
 
+    private static Navigator instance;
+
     @Inject
     public Navigator() {
 
+    }
+
+    public static Navigator getInstance() {
+        if (instance == null)
+            instance = new Navigator();
+        return instance;
     }
 
     private void replaceFragment(FragmentActivity activity, Fragment fragment, String tag) {

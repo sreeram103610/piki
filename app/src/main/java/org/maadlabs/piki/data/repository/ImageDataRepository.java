@@ -6,6 +6,7 @@ import org.maadlabs.piki.data.source.ImageDataSource;
 import org.maadlabs.piki.data.source.ImageDataSourceFactory;
 import org.maadlabs.piki.domain.repository.ImageRepository;
 
+import java.io.File;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -34,4 +35,11 @@ public class ImageDataRepository implements ImageRepository {
     public Observable<List<ImageData>> trending(int limit, int offset) {
         return mImageDataSource.trending(limit, offset);
     }
+
+    @Override
+    public Observable<File> saveImage(ImageData imageData) {
+        return mImageDataSource.saveImage(imageData);
+    }
+
+
 }

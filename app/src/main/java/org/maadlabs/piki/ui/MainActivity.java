@@ -38,12 +38,11 @@ public class MainActivity extends AppCompatActivity implements LoadingInterface,
     TextView mRetryInfoTextView;
     @BindView(R.id.loading_progress_bar)
     ProgressBar mLoadingProgressBar;
+
     @Inject
     Navigator mNavigator;
-    SearchView mSearchView;
 
-    FragmentManager mFragmentManager;
-    TrendingImagesFragment mGridFragment;
+    SearchView mSearchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +51,10 @@ public class MainActivity extends AppCompatActivity implements LoadingInterface,
 
         ButterKnife.bind(this);
         DaggerActivityComponent.builder()
-                .myModule(new MyModule(this)).build().inject(this);
+                .myModule(new MyModule(getBaseContext())).build().inject(this);
         initToolbar();
         mNavigator.navigateToTrendingView(this);
+        Log.i("ActivityContext", getBaseContext().hashCode() + "");
     }
 
     private void initToolbar() {

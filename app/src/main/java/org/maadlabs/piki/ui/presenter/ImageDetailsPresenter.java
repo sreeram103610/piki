@@ -11,7 +11,6 @@ import javax.inject.Inject;
 
 public class ImageDetailsPresenter implements Presenter<ImageInfoViewModel> {
 
-    @Inject
     ImageInfoViewModel mImageInfoViewModel;
 
     @Inject

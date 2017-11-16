@@ -6,14 +6,16 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
+
 import org.maadlabs.piki.R;
 import org.maadlabs.piki.data.di.ApiModule;
 import org.maadlabs.piki.data.di.ImageDataRepositoryModule;
-import org.maadlabs.piki.ui.di.DaggerFragmentComponent;
 import org.maadlabs.piki.ui.di.MyModule;
 import org.maadlabs.piki.ui.model.ImageDataModel;
 import org.maadlabs.piki.ui.navigator.Navigator;
@@ -45,36 +47,32 @@ public class SearchFragment extends Fragment implements SearchableViewModel, Ima
     @Inject
     SearchImagesPresenter mPresenter;
 
-    @Inject
     Navigator mNavigator;
 
     LoadingInterface mLoadingInterface;
     private String mSearchQuery;
 
+    @Inject
     public SearchFragment() {
         // Required empty public constructor
     }
 
 
-    public static SearchFragment newInstance() {
-        SearchFragment fragment = new SearchFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        Log.i("SFragContext", mContext.hashCode() + "");
+
         View view = inflater.inflate(R.layout.fragment_image_grid, container, false);
         ButterKnife.bind(this, view);
         mLoadingInterface = (LoadingInterface) getActivity();
+        mNavigator = Navigator.getInstance();
         return view;
     }
 
@@ -89,6 +87,7 @@ public class SearchFragment extends Fragment implements SearchableViewModel, Ima
 
     private void initViews() {
         mImagesListAdapter.setItemInfoListener(this);
+        Log.i("Context Addr  Frag = ", mContext.hashCode() + "");
         mImagesRecyclerView.setLayoutManager(new GridLayoutManager(mContext, 2));
         mImagesRecyclerView.setAdapter(mImagesListAdapter);
     }
@@ -97,8 +96,6 @@ public class SearchFragment extends Fragment implements SearchableViewModel, Ima
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        DaggerFragmentComponent.builder().apiModule(new ApiModule()).imageDataRepositoryModule(new ImageDataRepositoryModule())
-                .myModule(new MyModule(getContext())).build().inject(this);
         initViews();
         mPresenter.setView(this);
         if (mSearchQuery != null)

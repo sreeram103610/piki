@@ -3,6 +3,7 @@ package org.maadlabs.piki.data.source;
 import org.maadlabs.piki.domain.entity.ImageData;
 import org.maadlabs.piki.data.net.RestApi;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,5 +48,10 @@ public class OnlineDataSource implements ImageDataSource {
         }
 
         return Observable.mergeDelayError(observableList);
+    }
+
+    @Override
+    public Observable<File> saveImage(ImageData imageData) {
+        return null;
     }
 }

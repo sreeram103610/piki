@@ -3,6 +3,7 @@ package org.maadlabs.piki.ui.di;
 import android.content.Context;
 
 import org.maadlabs.piki.ui.model.ImageDataModel;
+import org.maadlabs.piki.ui.navigator.Navigator;
 import org.maadlabs.piki.ui.view.fragment.ImageDetailsFragmentView;
 import org.maadlabs.piki.ui.view.intf.SearchableViewModel;
 import org.maadlabs.piki.ui.view.intf.TrendingDataViewModel;
@@ -34,15 +35,15 @@ public class MyModule {
     }
 
     @Provides
-    TrendingDataViewModel trending() {
-        return new TrendingImagesFragment();
+    TrendingDataViewModel trending(TrendingImagesFragment fragment) {
+        return fragment;
     }
 
     @Provides
-    SearchableViewModel searchable() {
-        return new SearchFragment();
+    SearchableViewModel searchable(SearchFragment fragment) {
+        return fragment;
     }
 
     @Provides
-    ImageInfoViewModel imageInfo() { return new ImageDetailsFragmentView(); }
+    ImageInfoViewModel imageInfo(ImageDetailsFragmentView fragmentView) { return fragmentView; }
 }

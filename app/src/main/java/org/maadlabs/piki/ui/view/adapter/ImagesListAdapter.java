@@ -84,7 +84,7 @@ public class ImagesListAdapter extends RecyclerView.Adapter<ImagesListAdapter.Ho
             }
         });
 
-        RequestOptions options = new RequestOptions().fitCenter().diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
+        RequestOptions options = new RequestOptions().fitCenter().diskCacheStrategy(DiskCacheStrategy.RESOURCE);
         Glide.with(mContext).setDefaultRequestOptions(options).load(dataModel.getUri()).into(holder.imageView);
     }
 
