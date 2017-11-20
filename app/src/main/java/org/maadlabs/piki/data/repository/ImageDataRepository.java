@@ -37,8 +37,8 @@ public class ImageDataRepository implements ImageRepository {
     }
 
     @Override
-    public Observable<File> saveImage(ImageData imageData) {
-        return mImageDataSource.saveImage(imageData);
+    public Observable<File> saveImage(File file, ImageData imageData) {
+        return mImageDataSource.saveImage(file, imageData);
     }
 
 

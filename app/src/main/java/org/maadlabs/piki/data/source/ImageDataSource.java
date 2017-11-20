@@ -17,5 +17,5 @@ public interface ImageDataSource {
 
     Observable<List<ImageData>> trending(int limit, int offset);
 
-    Observable<File> saveImage(ImageData imageData);
+    Observable<File> saveImage(File file, ImageData imageData);
 }

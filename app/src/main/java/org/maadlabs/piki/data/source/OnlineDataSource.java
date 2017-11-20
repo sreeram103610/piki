@@ -1,5 +1,8 @@
 package org.maadlabs.piki.data.source;
 
+import android.os.Environment;
+
+import org.maadlabs.piki.data.util.FileUtils;
 import org.maadlabs.piki.domain.entity.ImageData;
 import org.maadlabs.piki.data.net.RestApi;
 
@@ -51,7 +54,15 @@ public class OnlineDataSource implements ImageDataSource {
     }
 
     @Override
-    public Observable<File> saveImage(ImageData imageData) {
-        return null;
+    public Observable<File> saveImage(File file, ImageData imageData) {
+
+        if (file == null)
+            return null;
+
+        File fileCopied =  FileUtils.storeFile(file.getName(),
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath(), file);
+
+        return Observable.just(fileCopied);
+
     }
 }
