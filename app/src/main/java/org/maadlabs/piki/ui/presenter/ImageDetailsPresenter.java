@@ -41,4 +41,11 @@ public class ImageDetailsPresenter implements Presenter<ImageInfoViewModel> {
     public void destory() {
 
     }
+
+    public void onButtonClicked(ImageInfoViewModel.ButtonType buttonType) {
+        switch (buttonType) {
+            case DOWNLOAD:
+                mImageInfoViewModel.getImage();
+        }
+    }
 }

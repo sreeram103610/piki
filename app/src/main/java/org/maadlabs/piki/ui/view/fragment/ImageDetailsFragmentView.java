@@ -12,18 +12,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
 import org.maadlabs.piki.R;
-import org.maadlabs.piki.ui.di.MyModule;
 import org.maadlabs.piki.ui.model.ImageDataModel;
 import org.maadlabs.piki.ui.presenter.ImageDetailsPresenter;
 import org.maadlabs.piki.ui.view.intf.ImageInfoViewModel;
 
+import java.io.File;
+import java.util.concurrent.ExecutionException;
+
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,7 +34,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ImageDetailsFragmentView extends Fragment implements ImageInfoViewModel {
+public class ImageDetailsFragmentView extends Fragment implements ImageInfoViewModel, View.OnClickListener {
 
     Toolbar mToolbar;
 
@@ -47,6 +50,10 @@ public class ImageDetailsFragmentView extends Fragment implements ImageInfoViewM
 
     @BindView(R.id.image_view)
     ImageView mImageView;
+    @BindView(R.id.downloadImageButton)
+    ImageButton mDownloadImageButton;
+    @BindView(R.id.shareImageButton)
+    ImageButton mShareImageButton;
 
     @Inject
     public ImageDetailsFragmentView() {
@@ -70,6 +77,8 @@ public class ImageDetailsFragmentView extends Fragment implements ImageInfoViewM
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mImageDetailsPresenter.setView(this);
+        mDownloadImageButton.setOnClickListener(this);
+        mShareImageButton.setOnClickListener(this);
     }
 
     private void initToolbar() {
@@ -88,6 +97,20 @@ public class ImageDetailsFragmentView extends Fragment implements ImageInfoViewM
     public void showImage() {
         if (mImageData != null && mImageData.getUri() != null)
             Glide.with(mContext).load(mImageData.getUri()).into(mImageView);
+    }
+
+    @Override
+    public File getImage() {
+
+        File file = null;
+        try {
+           file = Glide.with(mContext).download(mImageData.getUri()).submit().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return file;
     }
 
     @Override
@@ -123,17 +146,25 @@ public class ImageDetailsFragmentView extends Fragment implements ImageInfoViewM
     @Override
     public void onClick(ButtonType buttonType) {
 
-        switch(buttonType) {
-            case SHARE:
-                break;
-            case DOWNLOAD:
-
-                break;
-        }
+        mImageDetailsPresenter.onButtonClicked(buttonType);
     }
 
     @Override
     public void setImage(ImageDataModel imageModel) {
         mImageData = imageModel;
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+
+        switch (id) {
+            case R.id.shareImageButton:
+                onClick(ButtonType.SHARE);
+                break;
+            case R.id.downloadImageButton:
+                onClick(ButtonType.DOWNLOAD);
+                break;
+        }
     }
 }

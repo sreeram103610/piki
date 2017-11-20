@@ -2,6 +2,8 @@ package org.maadlabs.piki.ui.view.intf;
 
 import org.maadlabs.piki.ui.model.ImageDataModel;
 
+import java.io.File;
+
 /**
  * Created by brainfreak on 10/31/17.
  */
@@ -17,4 +19,5 @@ public interface ImageInfoViewModel extends LoadingInterface {
     void onClick(ButtonType buttonType);
     void setImage(ImageDataModel imageModel);
     void showImage();
+    File getImage();
 }

@@ -14,7 +14,6 @@ import dagger.Component;
  * Created by brainfreak on 10/29/17.
  */
 
-@PerActivity
 @Component(modules = {ApiModule.class, MyModule.class, ImageDataRepositoryModule.class})
 public interface ActivityComponent {
 
