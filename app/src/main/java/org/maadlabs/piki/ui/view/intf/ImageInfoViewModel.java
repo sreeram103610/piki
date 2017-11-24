@@ -1,5 +1,7 @@
 package org.maadlabs.piki.ui.view.intf;
 
+import android.support.v4.app.ActivityCompat;
+
 import org.maadlabs.piki.ui.model.ImageDataModel;
 
 import java.io.File;
@@ -20,4 +22,7 @@ public interface ImageInfoViewModel extends LoadingInterface {
     void setImage(ImageDataModel imageModel);
     void showImage();
     File getImage();
+    void showDownloadNotification();
+    void addStoragePermission(ActivityCompat.OnRequestPermissionsResultCallback callback);
+    boolean showRequestPermission();
 }

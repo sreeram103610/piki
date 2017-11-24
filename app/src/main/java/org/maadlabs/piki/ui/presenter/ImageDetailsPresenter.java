@@ -1,7 +1,10 @@
 package org.maadlabs.piki.ui.presenter;
 
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+
 import org.maadlabs.piki.domain.interacter.DownloadImageUseCase;
-import org.maadlabs.piki.ui.model.ImageDataModel;
+import org.maadlabs.piki.security.security.AndroidPermission;
 import org.maadlabs.piki.ui.view.intf.ImageInfoViewModel;
 
 import java.io.File;
@@ -14,7 +17,7 @@ import io.reactivex.observers.DisposableObserver;
  * Created by brainfreak on 10/31/17.
  */
 
-public class ImageDetailsPresenter implements Presenter<ImageInfoViewModel> {
+public class ImageDetailsPresenter implements Presenter<ImageInfoViewModel>, ActivityCompat.OnRequestPermissionsResultCallback {
 
     ImageInfoViewModel mImageInfoViewModel;
 
@@ -53,12 +56,29 @@ public class ImageDetailsPresenter implements Presenter<ImageInfoViewModel> {
     public void onButtonClicked(ImageInfoViewModel.ButtonType buttonType) {
         switch (buttonType) {
             case DOWNLOAD:
-                // must ask storage permissions before download
-                File cacheFile = mImageInfoViewModel.getImage();
-                mDownloadImageUseCase.setImageToDownload(cacheFile);
-                mDownloadImageUseCase.execute(new DownloadImageObserver());
+                mImageInfoViewModel.addStoragePermission(this);
+                boolean storagePermission = mImageInfoViewModel.showRequestPermission();
+                if (storagePermission)
+                    downloadImage();
+
                 break;
             case SHARE:
+        }
+    }
+
+    private void downloadImage() {
+        File cacheFile = mImageInfoViewModel.getImage();
+        mDownloadImageUseCase.setImageToDownload(cacheFile);
+        mDownloadImageUseCase.execute(new DownloadImageObserver());
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        switch (requestCode) {
+            case AndroidPermission.WRITE_STORAGE_REQUEST:
+                downloadImage();
+                break;
         }
     }
 
@@ -67,7 +87,7 @@ public class ImageDetailsPresenter implements Presenter<ImageInfoViewModel> {
         @Override
         public void onNext(File file) {
             if (file != null)
-                showNotification();
+                showNotification(file);
         }
 
         @Override
@@ -81,7 +101,7 @@ public class ImageDetailsPresenter implements Presenter<ImageInfoViewModel> {
         }
     }
 
-    private void showNotification() {
+    private void showNotification(File file) {
 
     }
 }

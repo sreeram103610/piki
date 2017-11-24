@@ -4,7 +4,9 @@ package org.maadlabs.piki.ui.view.fragment;
 import android.app.ActionBar;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,18 +14,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
 import org.maadlabs.piki.R;
+import org.maadlabs.piki.security.security.AndroidPermission;
 import org.maadlabs.piki.ui.model.ImageDataModel;
 import org.maadlabs.piki.ui.presenter.ImageDetailsPresenter;
 import org.maadlabs.piki.ui.view.intf.ImageInfoViewModel;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
@@ -46,6 +50,8 @@ public class ImageDetailsFragmentView extends Fragment implements ImageInfoViewM
     @Inject
     Context mContext;
 
+    private Set<ActivityCompat.OnRequestPermissionsResultCallback> mOnRequestPermissionsResultCallbacks;
+
     private View mView;
 
     @BindView(R.id.image_view)
@@ -54,6 +60,8 @@ public class ImageDetailsFragmentView extends Fragment implements ImageInfoViewM
     ImageButton mDownloadImageButton;
     @BindView(R.id.shareImageButton)
     ImageButton mShareImageButton;
+    @Inject
+    AndroidPermission mAndroidPermissions;
 
     @Inject
     public ImageDetailsFragmentView() {
@@ -69,6 +77,7 @@ public class ImageDetailsFragmentView extends Fragment implements ImageInfoViewM
 
         mView = inflater.inflate(R.layout.fragment_image_details, container, false);
         ButterKnife.bind(this, mView);
+        mOnRequestPermissionsResultCallbacks = new HashSet<>();
         initToolbar();
         return mView;
     }
@@ -111,6 +120,32 @@ public class ImageDetailsFragmentView extends Fragment implements ImageInfoViewM
             e.printStackTrace();
         }
         return file;
+    }
+
+    @Override
+    public void showDownloadNotification() {
+
+    }
+
+    @Override
+    public void addStoragePermission(ActivityCompat.OnRequestPermissionsResultCallback callback) {
+
+        if (!mOnRequestPermissionsResultCallbacks.contains(callback))
+            mOnRequestPermissionsResultCallbacks.add(callback);
+    }
+
+    @Override
+    public boolean showRequestPermission() {
+
+        return mAndroidPermissions.requestWriteStoragePermission(this);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        for (ActivityCompat.OnRequestPermissionsResultCallback callback : mOnRequestPermissionsResultCallbacks) {
+            callback.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 
     @Override

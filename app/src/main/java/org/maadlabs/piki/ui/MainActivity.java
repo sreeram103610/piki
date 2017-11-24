@@ -3,6 +3,7 @@ package org.maadlabs.piki.ui;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -130,5 +131,10 @@ public class MainActivity extends AppCompatActivity implements LoadingInterface,
     public boolean onMenuItemActionCollapse(MenuItem item) {
         mNavigator.navigateToTrendingView(MainActivity.this);
         return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
     }
 }
