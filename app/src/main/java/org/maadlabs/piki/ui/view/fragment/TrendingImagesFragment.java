@@ -1,10 +1,13 @@
 package org.maadlabs.piki.ui.view.fragment;
 
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -59,14 +62,12 @@ public class TrendingImagesFragment extends Fragment implements TrendingDataView
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
-        Log.i("TIFragContext", mContext.hashCode() + "");
-
         View view = inflater.inflate(R.layout.fragment_image_grid, container, false);
         ButterKnife.setDebug(true);
         ButterKnife.bind(this, view);
         mLoadingInterface = (LoadingInterface) getActivity();
         mNavigator = Navigator.getInstance();
+
         return view;
     }
 
@@ -85,6 +86,19 @@ public class TrendingImagesFragment extends Fragment implements TrendingDataView
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        Log.i("tF", "onStop");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.i("tF", "onDestroy");
+
+    }
+
+    @Override
     public void onImageClicked(ImageDataModel model) {
 
         mNavigator.navigateToViewImage(getActivity(), model);
@@ -93,7 +107,7 @@ public class TrendingImagesFragment extends Fragment implements TrendingDataView
     @Override
     public void loadImages(List<ImageDataModel> imageList) {
         mImagesRecyclerView.setVisibility(View.VISIBLE);
-        mImagesListAdapter.setCollection(imageList);
+        mImagesListAdapter.setCollection(imageList, false);
     }
 
     @Override

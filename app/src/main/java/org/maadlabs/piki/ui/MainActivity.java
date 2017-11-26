@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements LoadingInterface,
         mRetryInfoTextView.setVisibility(View.GONE);
     }
 
+
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -111,7 +112,6 @@ public class MainActivity extends AppCompatActivity implements LoadingInterface,
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        Log.i("onQuery2", "Search");
         mNavigator.navigateToSearchView(this, query);
         mSearchView.clearFocus();
         return true;
@@ -131,6 +131,12 @@ public class MainActivity extends AppCompatActivity implements LoadingInterface,
     public boolean onMenuItemActionCollapse(MenuItem item) {
         mNavigator.navigateToTrendingView(MainActivity.this);
         return true;
+    }
+
+    @Override
+    public void onOptionsMenuClosed(Menu menu) {
+        super.onOptionsMenuClosed(menu);
+        Log.i("menu", "closed");
     }
 
     @Override

@@ -4,10 +4,14 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -35,6 +39,7 @@ import butterknife.ButterKnife;
 public class SearchFragment extends Fragment implements SearchableViewModel, ImagesListAdapter.ItemInfoListener {
 
 
+    private static final String SEARCH_VIEW_STRING = "SearchView";
     @BindView(R.id.images_recyclerview)
     RecyclerView mImagesRecyclerView;
 
@@ -51,6 +56,9 @@ public class SearchFragment extends Fragment implements SearchableViewModel, Ima
 
     LoadingInterface mLoadingInterface;
     private String mSearchQuery;
+    private boolean mViewCreated;
+    private Bundle mStateBundle;
+    private SearchView mSearchView;
 
     @Inject
     public SearchFragment() {
@@ -60,12 +68,16 @@ public class SearchFragment extends Fragment implements SearchableViewModel, Ima
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        if (savedInstanceState != null)
+            mStateBundle = savedInstanceState;
 
         Log.i("SFragContext", mContext.hashCode() + "");
 
@@ -76,14 +88,29 @@ public class SearchFragment extends Fragment implements SearchableViewModel, Ima
         return view;
     }
 
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        mSearchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        if (mStateBundle != null)
+            mSearchView.setQuery(mStateBundle.getString(SEARCH_VIEW_STRING), false);
+    }
+
     @Override
     public void setQuery(String query) {
 
         mSearchQuery = query;
-        if (mPresenter != null) // Fragment already on top
-            mPresenter.onSearchQuery(query);
+        if (mViewCreated)
+            mPresenter.onSearchQuery(mSearchQuery);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString(SEARCH_VIEW_STRING, mSearchView.getQuery().toString());
+        super.onSaveInstanceState(outState);
+    }
 
     private void initViews() {
         mImagesListAdapter.setItemInfoListener(this);
@@ -98,8 +125,8 @@ public class SearchFragment extends Fragment implements SearchableViewModel, Ima
 
         initViews();
         mPresenter.setView(this);
-        if (mSearchQuery != null)
-            mPresenter.onSearchQuery(mSearchQuery);
+        mPresenter.onSearchQuery(mSearchQuery);
+        mViewCreated = true;
     }
 
     @Override
@@ -111,7 +138,7 @@ public class SearchFragment extends Fragment implements SearchableViewModel, Ima
     @Override
     public void loadImages(List<ImageDataModel> imageList) {
         mImagesRecyclerView.setVisibility(View.VISIBLE);
-        mImagesListAdapter.setCollection(imageList);
+        mImagesListAdapter.setCollection(imageList, true);
     }
 
     @Override
@@ -176,6 +203,7 @@ public class SearchFragment extends Fragment implements SearchableViewModel, Ima
 
     @Override
     public void onItemClick(int position, ImageDataModel model) {
+
         onImageClicked(model);
     }
 

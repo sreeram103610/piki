@@ -2,6 +2,7 @@ package org.maadlabs.piki.ui.presenter;
 
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 
 import org.maadlabs.piki.domain.interacter.DownloadImageUseCase;
 import org.maadlabs.piki.security.security.AndroidPermission;
@@ -84,10 +85,11 @@ public class ImageDetailsPresenter implements Presenter<ImageInfoViewModel>, Act
 
     private final class DownloadImageObserver extends DisposableObserver<File> {
 
+        File mFile;
+
         @Override
         public void onNext(File file) {
-            if (file != null)
-                showNotification(file);
+            mFile = file;
         }
 
         @Override
@@ -97,11 +99,12 @@ public class ImageDetailsPresenter implements Presenter<ImageInfoViewModel>, Act
 
         @Override
         public void onComplete() {
-
+            if (mFile != null)
+                showNotification(mFile);
         }
     }
 
     private void showNotification(File file) {
-
+        mImageInfoViewModel.showDownloadNotification(file);
     }
 }

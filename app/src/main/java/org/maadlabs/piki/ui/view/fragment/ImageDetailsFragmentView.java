@@ -1,14 +1,21 @@
 package org.maadlabs.piki.ui.view.fragment;
 
 
-import android.app.ActionBar;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NotificationCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +25,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.GlideBuilder;
+import com.bumptech.glide.request.RequestOptions;
 
 import org.maadlabs.piki.R;
 import org.maadlabs.piki.security.security.AndroidPermission;
@@ -78,7 +87,6 @@ public class ImageDetailsFragmentView extends Fragment implements ImageInfoViewM
         mView = inflater.inflate(R.layout.fragment_image_details, container, false);
         ButterKnife.bind(this, mView);
         mOnRequestPermissionsResultCallbacks = new HashSet<>();
-        initToolbar();
         return mView;
     }
 
@@ -90,17 +98,6 @@ public class ImageDetailsFragmentView extends Fragment implements ImageInfoViewM
         mShareImageButton.setOnClickListener(this);
     }
 
-    private void initToolbar() {
-
-        FragmentActivity activity = getActivity();
-        if (activity != null) {
-            ActionBar actionBar = activity.getActionBar();
-            if (actionBar != null) {
-                actionBar.setDisplayHomeAsUpEnabled(true);
-                actionBar.setHomeButtonEnabled(true);
-            }
-        }
-    }
 
     @Override
     public void showImage() {
@@ -112,19 +109,28 @@ public class ImageDetailsFragmentView extends Fragment implements ImageInfoViewM
     public File getImage() {
 
         File file = null;
-        try {
-           file = Glide.with(mContext).download(mImageData.getUri()).submit().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+        BitmapDrawable drawable = (BitmapDrawable) mImageView.getDrawable();
+        Bitmap bitmap = drawable.getBitmap();
         return file;
     }
 
     @Override
-    public void showDownloadNotification() {
+    public void showDownloadNotification(File file) {
 
+        Intent imageIntent = new Intent();
+        imageIntent.setDataAndType(Uri.fromFile(file), "image/*");
+
+        String description = file.getName();
+
+        PendingIntent intent = PendingIntent.getActivity(mContext, 0, imageIntent, PendingIntent.FLAG_ONE_SHOT);
+
+        NotificationCompat.Builder notification = new NotificationCompat.Builder(mContext)
+                .setContentTitle(getString(R.string.image_downloaded))
+                .setContentText(description)
+                .setSmallIcon(R.drawable.download_icon_24dp)
+                .setAutoCancel(true)
+                .setContentIntent(intent);
+        notification.build().notify();
     }
 
     @Override

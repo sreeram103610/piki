@@ -2,6 +2,8 @@ package org.maadlabs.piki.ui.di;
 
 import android.content.Context;
 
+import org.maadlabs.piki.security.security.AndroidPermission;
+import org.maadlabs.piki.security.security.MyPermissions;
 import org.maadlabs.piki.ui.model.ImageDataModel;
 import org.maadlabs.piki.ui.navigator.Navigator;
 import org.maadlabs.piki.ui.view.fragment.ImageDetailsFragmentView;
@@ -46,4 +48,7 @@ public class MyModule {
 
     @Provides
     ImageInfoViewModel imageInfo(ImageDetailsFragmentView fragmentView) { return fragmentView; }
+
+    @Provides
+    AndroidPermission permission(MyPermissions permissions) { return permissions; }
 }

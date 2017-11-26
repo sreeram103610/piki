@@ -22,7 +22,7 @@ public interface ImageInfoViewModel extends LoadingInterface {
     void setImage(ImageDataModel imageModel);
     void showImage();
     File getImage();
-    void showDownloadNotification();
+    void showDownloadNotification(File file);
     void addStoragePermission(ActivityCompat.OnRequestPermissionsResultCallback callback);
     boolean showRequestPermission();
 }

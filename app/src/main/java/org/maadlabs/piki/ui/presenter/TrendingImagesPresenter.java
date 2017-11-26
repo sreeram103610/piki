@@ -25,7 +25,6 @@ public class TrendingImagesPresenter implements Presenter<TrendingDataViewModel>
 
     TrendingDataViewModel mImageDataModel;
     private ImageListObserver mImageListObserver;
-    private boolean mImagesLoaded;
 
     @Inject
     public TrendingImagesPresenter(TrendingImagesUseCase trendingImagesUseCase, ImageDataModelMapper mapper) {

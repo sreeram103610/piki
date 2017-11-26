@@ -111,7 +111,9 @@ public class ImagesListAdapter extends RecyclerView.Adapter<ImagesListAdapter.Ho
         }
     }
 
-    public void setCollection(Collection<ImageDataModel> imagesList) {
+    public void setCollection(Collection<ImageDataModel> imagesList, boolean invalidate) {
+        if (invalidate)
+            mModelList.clear();
         mModelList.addAll(imagesList);
         notifyDataSetChanged();
     }

@@ -31,7 +31,7 @@ public class Navigator {
 
     @Inject
     public Navigator() {
-
+        instance = this;
     }
 
     public static Navigator getInstance() {
@@ -67,7 +67,6 @@ public class Navigator {
         if (!(mSearchableViewModel instanceof Fragment))
             return;
 
-
         String tag = SearchableViewModel.TAG;
 
         if (!isVisible(activity, tag)) {
@@ -93,8 +92,8 @@ public class Navigator {
     }
 
     public void navigateToSearchView(FragmentActivity activity, String query) {
-        mSearchableViewModel.setQuery(query);
         navigateToSearchView(activity);
+        mSearchableViewModel.setQuery(query);
     }
 
     public void navigateToViewImage(FragmentActivity activity, ImageDataModel model) {

@@ -1,5 +1,8 @@
 package org.maadlabs.piki.ui.presenter;
 
+import android.app.Fragment;
+
+import org.maadlabs.piki.R;
 import org.maadlabs.piki.domain.entity.ImageData;
 import org.maadlabs.piki.domain.interacter.SearchImageListUseCase;
 import org.maadlabs.piki.ui.mapper.ImageDataModelMapper;
@@ -113,7 +116,7 @@ public class SearchImagesPresenter implements Presenter<SearchableViewModel> {
         public void onError(@NonNull Throwable e) {
             hideViewLoading();
             hideImages();
-            showErrorMessage(e.getMessage());
+            showErrorMessage(((Fragment) mSearchableViewModel).getString(R.string.error_image));
             showViewRetry();
         }
 
