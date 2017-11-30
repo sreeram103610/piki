@@ -4,7 +4,6 @@ import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,15 +22,17 @@ import org.maadlabs.piki.R;
 import org.maadlabs.piki.ui.di.DaggerActivityComponent;
 import org.maadlabs.piki.ui.di.MyModule;
 import org.maadlabs.piki.ui.navigator.Navigator;
+import org.maadlabs.piki.ui.view.intf.ToolbarCallback;
 import org.maadlabs.piki.ui.view.intf.LoadingInterface;
-import org.maadlabs.piki.ui.view.fragment.TrendingImagesFragment;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements LoadingInterface, SearchView.OnQueryTextListener, MenuItemCompat.OnActionExpandListener {
+public class MainActivity extends AppCompatActivity implements LoadingInterface, ToolbarCallback, SearchView.OnQueryTextListener, MenuItemCompat.OnActionExpandListener {
+
+    public static final String SEARCH_VIEW_KEY = "search_view_key";
 
     @BindView(R.id.retry_linear_layout)
     LinearLayout mRetryLinearLayout;
@@ -143,4 +144,25 @@ public class MainActivity extends AppCompatActivity implements LoadingInterface,
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
     }
+
+    @Override
+    public Bundle onSaveToolbarData() {
+
+        Bundle bundle = new Bundle();
+        if (mSearchView != null && mSearchView.getQuery() != null && mSearchView.getQuery().toString().length() > 0)
+            bundle.putString(SEARCH_VIEW_KEY, mSearchView.getQuery().toString());
+        return bundle;
+    }
+
+    @Override
+    public void onRestoreToolbarData(Bundle bundle) {
+
+        if (bundle != null && bundle.containsKey(SEARCH_VIEW_KEY)) {
+            String value = bundle.getString(SEARCH_VIEW_KEY);
+            if (value == null || value.length() == 0 || mSearchView == null)
+                return;
+            mSearchView.setQuery(value, false);
+        }
+    }
+
 }

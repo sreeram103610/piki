@@ -27,6 +27,7 @@ import org.maadlabs.piki.ui.presenter.SearchImagesPresenter;
 import org.maadlabs.piki.ui.view.intf.LoadingInterface;
 import org.maadlabs.piki.ui.view.intf.SearchableViewModel;
 import org.maadlabs.piki.ui.view.adapter.ImagesListAdapter;
+import org.maadlabs.piki.ui.view.intf.ToolbarCallback;
 
 import java.util.List;
 
@@ -58,7 +59,7 @@ public class SearchFragment extends Fragment implements SearchableViewModel, Ima
     private String mSearchQuery;
     private boolean mViewCreated;
     private Bundle mStateBundle;
-    private SearchView mSearchView;
+    private ToolbarCallback mToolbarData;
 
     @Inject
     public SearchFragment() {
@@ -85,6 +86,10 @@ public class SearchFragment extends Fragment implements SearchableViewModel, Ima
         ButterKnife.bind(this, view);
         mLoadingInterface = (LoadingInterface) getActivity();
         mNavigator = Navigator.getInstance();
+
+        if (getActivity() instanceof ToolbarCallback)
+            mToolbarData = (ToolbarCallback) getActivity();
+        mToolbarData.onRestoreToolbarData(savedInstanceState);
         return view;
     }
 
@@ -93,9 +98,6 @@ public class SearchFragment extends Fragment implements SearchableViewModel, Ima
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
-        mSearchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        if (mStateBundle != null)
-            mSearchView.setQuery(mStateBundle.getString(SEARCH_VIEW_STRING), false);
     }
 
     @Override
@@ -108,7 +110,10 @@ public class SearchFragment extends Fragment implements SearchableViewModel, Ima
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putString(SEARCH_VIEW_STRING, mSearchView.getQuery().toString());
+
+        if (mToolbarData != null) {
+             outState = mToolbarData.onSaveToolbarData();
+        }
         super.onSaveInstanceState(outState);
     }
 
@@ -186,12 +191,19 @@ public class SearchFragment extends Fragment implements SearchableViewModel, Ima
     public void onPause() {
         super.onPause();
         mPresenter.pause();
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
         mPresenter.resume();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
     }
 
     @Override
