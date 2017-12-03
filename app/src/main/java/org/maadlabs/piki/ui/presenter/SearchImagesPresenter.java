@@ -55,6 +55,10 @@ public class SearchImagesPresenter implements Presenter<SearchableViewModel> {
         mSearchableViewModel.hideRetry();
     }
 
+    private void showErrorMessage(int error) {
+        mSearchableViewModel.showError(error);
+    }
+
     private void showErrorMessage(String error) {
         mSearchableViewModel.showError(error);
     }
@@ -116,7 +120,7 @@ public class SearchImagesPresenter implements Presenter<SearchableViewModel> {
         public void onError(@NonNull Throwable e) {
             hideViewLoading();
             hideImages();
-            showErrorMessage(((Fragment) mSearchableViewModel).getString(R.string.error_image));
+            showErrorMessage(R.string.error_image);
             showViewRetry();
         }
 

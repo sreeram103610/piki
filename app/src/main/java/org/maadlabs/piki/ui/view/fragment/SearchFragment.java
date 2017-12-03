@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import org.maadlabs.piki.R;
 import org.maadlabs.piki.data.di.ApiModule;
 import org.maadlabs.piki.data.di.ImageDataRepositoryModule;
+import org.maadlabs.piki.ui.MainActivity;
 import org.maadlabs.piki.ui.di.MyModule;
 import org.maadlabs.piki.ui.model.ImageDataModel;
 import org.maadlabs.piki.ui.navigator.Navigator;
@@ -77,19 +78,15 @@ public class SearchFragment extends Fragment implements SearchableViewModel, Ima
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        if (savedInstanceState != null)
-            mStateBundle = savedInstanceState;
-
-        Log.i("SFragContext", mContext.hashCode() + "");
+        mStateBundle = savedInstanceState;
 
         View view = inflater.inflate(R.layout.fragment_image_grid, container, false);
         ButterKnife.bind(this, view);
         mLoadingInterface = (LoadingInterface) getActivity();
         mNavigator = Navigator.getInstance();
 
-        if (getActivity() instanceof ToolbarCallback)
-            mToolbarData = (ToolbarCallback) getActivity();
-        mToolbarData.onRestoreToolbarData(savedInstanceState);
+        mToolbarData = (ToolbarCallback) getActivity();
+
         return view;
     }
 
@@ -97,7 +94,6 @@ public class SearchFragment extends Fragment implements SearchableViewModel, Ima
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-
     }
 
     @Override
@@ -132,6 +128,14 @@ public class SearchFragment extends Fragment implements SearchableViewModel, Ima
         mPresenter.setView(this);
         mPresenter.onSearchQuery(mSearchQuery);
         mViewCreated = true;
+
+        if (mStateBundle != null)
+            mToolbarData.onRestoreToolbarData(savedInstanceState);
+        else if (mSearchQuery != null) {
+            Bundle bundle = new Bundle();
+            bundle.putString(MainActivity.SEARCH_VIEW_KEY, mSearchQuery);
+            mToolbarData.onRestoreToolbarData(bundle);
+        }
     }
 
     @Override
@@ -172,6 +176,11 @@ public class SearchFragment extends Fragment implements SearchableViewModel, Ima
     }
 
     @Override
+    public void showError(int error) {
+        mLoadingInterface.showError(getString(error));
+    }
+
+    @Override
     public void init() {
 
     }
@@ -209,7 +218,8 @@ public class SearchFragment extends Fragment implements SearchableViewModel, Ima
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mPresenter.destory();
+        if (mPresenter != null)
+            mPresenter.destory();
     }
 
 

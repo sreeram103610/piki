@@ -49,8 +49,6 @@ import butterknife.ButterKnife;
  */
 public class ImageDetailsFragmentView extends Fragment implements ImageInfoViewModel, View.OnClickListener {
 
-    Toolbar mToolbar;
-
     ImageDataModel mImageData;
 
     @Inject
@@ -183,6 +181,7 @@ public class ImageDetailsFragmentView extends Fragment implements ImageInfoViewM
     public void hideError() {
 
     }
+
 
     @Override
     public void onClick(ButtonType buttonType) {

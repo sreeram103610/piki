@@ -5,7 +5,11 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
+import org.maadlabs.piki.ui.MainActivity;
 import org.maadlabs.piki.ui.model.ImageDataModel;
+import org.maadlabs.piki.ui.view.fragment.ImageDetailsFragmentView;
+import org.maadlabs.piki.ui.view.fragment.SearchFragment;
+import org.maadlabs.piki.ui.view.fragment.TrendingImagesFragment;
 import org.maadlabs.piki.ui.view.intf.TrendingDataViewModel;
 import org.maadlabs.piki.ui.view.intf.SearchableViewModel;
 import org.maadlabs.piki.ui.view.intf.ImageInfoViewModel;
@@ -104,9 +108,23 @@ public class Navigator {
         String tag = ImageInfoViewModel.TAG;
 
         mImageInfoViewModel.setImage(model);
-        activity.getSupportFragmentManager().beginTransaction().addToBackStack(null)
+        activity.getSupportFragmentManager().beginTransaction()
                 .replace(android.R.id.content, (Fragment) mImageInfoViewModel, tag)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .addToBackStack(null)
                 .commit();
      }
+
+    public boolean onImageDetailsViewVisible(FragmentActivity activity) {
+
+        return isVisible(activity, ImageDetailsFragmentView.TAG);
+    }
+
+    public boolean onBackPressed(FragmentActivity activity) {
+        FragmentManager manager = activity.getSupportFragmentManager();
+        if(manager.getBackStackEntryCount() > 0) {
+            manager.popBackStack();
+            return false;
+        }
+        return true;
+    }
 }

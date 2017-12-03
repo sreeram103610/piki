@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements LoadingInterface,
     Navigator mNavigator;
 
     SearchView mSearchView;
+    private MenuItem mSearchMenuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,13 +102,14 @@ public class MainActivity extends AppCompatActivity implements LoadingInterface,
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_options_menu, menu);
 
+        mSearchMenuItem = menu.findItem(R.id.search);
+
         SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         mSearchView = (SearchView) menu.findItem(R.id.search).getActionView();
         mSearchView.setSearchableInfo(manager.getSearchableInfo(new ComponentName(getApplicationContext(), MainActivity.class)));
         mSearchView.setOnQueryTextListener(this);
 
-        MenuItem searchMenuItem = menu.findItem(R.id.search);
-        MenuItemCompat.setOnActionExpandListener(searchMenuItem, this);
+        MenuItemCompat.setOnActionExpandListener(mSearchMenuItem, this);
         return true;
     }
 
@@ -125,19 +127,40 @@ public class MainActivity extends AppCompatActivity implements LoadingInterface,
 
     @Override
     public boolean onMenuItemActionExpand(MenuItem item) {
+        Log.i("on", "expand");
         return true;
     }
 
     @Override
     public boolean onMenuItemActionCollapse(MenuItem item) {
-        mNavigator.navigateToTrendingView(MainActivity.this);
-        return true;
+        Log.i("on", "collapse");
+        onBackPressed();
+        boolean collapseFragment = mNavigator.onImageDetailsViewVisible(this);
+        return !collapseFragment;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            //Title bar back press triggers onBackPressed()
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        boolean goBack = mNavigator.onBackPressed(this);
+        if (goBack && !mSearchMenuItem.isActionViewExpanded()) {
+            super.onBackPressed();
+        }
     }
 
     @Override
     public void onOptionsMenuClosed(Menu menu) {
         super.onOptionsMenuClosed(menu);
-        Log.i("menu", "closed");
     }
 
     @Override
@@ -162,6 +185,7 @@ public class MainActivity extends AppCompatActivity implements LoadingInterface,
             if (value == null || value.length() == 0 || mSearchView == null)
                 return;
             mSearchView.setQuery(value, false);
+            mSearchMenuItem.expandActionView();
         }
     }
 

@@ -20,6 +20,7 @@ public interface SearchableViewModel {
     void showRetry();
     void hideRetry();
     void showError(String errorMessage);
+    void showError(int error);
     void init();
 
     void hideErrorMessage();
