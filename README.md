@@ -22,4 +22,4 @@ The Clean architecture to make independent our code from data sources, UI, Frame
 
 GIF view
 --------
-![screenshot](screenshot.gif "gif")
+<img src="screenshot.gif" width="400" height="720">
