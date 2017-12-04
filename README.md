@@ -22,4 +22,4 @@ The Clean architecture to make independent our code from data sources, UI, Frame
 
 GIF view
 --------
-![screenshot](./img/screenshot_1.png "Screenshot 1")
+![screenshot](screenshot.gif "gif")
